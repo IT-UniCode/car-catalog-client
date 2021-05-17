@@ -3,6 +3,7 @@ import { Content } from 'antd/lib/layout/layout';
 import { Switch, Route } from 'react-router-dom';
 
 import Home from '../Pages/Home';
+import Catalog from '../Pages/Catalog';
 
 interface IRoutes {
   path: string;
@@ -15,6 +16,11 @@ const ROUTES: IRoutes[] = [
     path: '/',
     exact: true,
     componnent: <Home />,
+  },
+  {
+    path: '/catalog',
+    exact: false,
+    componnent: <Catalog />,
   },
 ];
 
