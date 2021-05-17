@@ -18,17 +18,18 @@ const CustomHeader: FC = () => {
 
   return (
     <Header className={classes.root}>
-      <div className='logo' />
-      <Menu theme='dark' mode='horizontal' selectedKeys={path}>
-        <Menu.Item key='/'>
-          <Link to='/' className='menu_link'>
-            Главная
-          </Link>
-        </Menu.Item>
-        <Menu.Item key='/catalog'>
-          <Link to='/catalog'>Каталог</Link>
-        </Menu.Item>
-      </Menu>
+      <div className='container'>
+        <Menu theme='dark' mode='horizontal' selectedKeys={path}>
+          <Menu.Item key='/'>
+            <Link to='/' className='menu_link'>
+              Главная
+            </Link>
+          </Menu.Item>
+          <Menu.Item key='/catalog'>
+            <Link to='/catalog'>Каталог</Link>
+          </Menu.Item>
+        </Menu>
+      </div>
     </Header>
   );
 };
