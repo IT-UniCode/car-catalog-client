@@ -5,6 +5,8 @@ import { Switch, Route } from 'react-router-dom';
 import Home from '../Pages/Home';
 import Catalog from '../Pages/Catalog';
 
+import useStyles from './style';
+
 interface IRoutes {
   path: string;
   exact: boolean;
@@ -25,8 +27,10 @@ const ROUTES: IRoutes[] = [
 ];
 
 const Routes: FC = () => {
+  const classes = useStyles();
+
   return (
-    <Content>
+    <Content className={classes.root}>
       <Switch>
         {ROUTES.map((item, index) => (
           <Route path={item.path} exact={item.exact} key={index}>

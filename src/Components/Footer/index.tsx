@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Layout } from 'antd';
+
+import useStyles from './style';
 
 const { Footer } = Layout;
 
-const CustomFooter = () => {
+const CustomFooter: FC = () => {
+  const classes = useStyles();
+
   return (
-    <Footer style={{ textAlign: 'center' }}>
+    <Footer className={classes.root}>
       Car Catalog ©2021 Created by UniCode
     </Footer>
   );

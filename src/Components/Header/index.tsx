@@ -1,16 +1,33 @@
-import React from 'react';
+import React, { FC, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router';
 import { Layout, Menu } from 'antd';
+
+import useStyles from './style';
 
 const { Header } = Layout;
 
-const CustomHeader = () => {
+const CustomHeader: FC = () => {
+  const classes = useStyles();
+  const history = useHistory();
+  const [path, setPath] = useState(['/']);
+
+  useEffect(() => {
+    setPath([`${history.location.pathname}`]);
+  }, [history.location.pathname]);
+
   return (
-    <Header>
-      <div className="logo" />
-      <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
-        <Menu.Item key="1">nav 1</Menu.Item>
-        <Menu.Item key="2">nav 2</Menu.Item>
-        <Menu.Item key="3">nav 3</Menu.Item>
+    <Header className={classes.root}>
+      <div className='logo' />
+      <Menu theme='dark' mode='horizontal' selectedKeys={path}>
+        <Menu.Item key='/'>
+          <Link to='/' className='menu_link'>
+            Главная
+          </Link>
+        </Menu.Item>
+        <Menu.Item key='/catalog'>
+          <Link to='/catalog'>Каталог</Link>
+        </Menu.Item>
       </Menu>
     </Header>
   );

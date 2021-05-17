@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { FC } from 'react';
 
 import useStyles from './style';
 
-const Home = () => {
+const Home: FC = () => {
   const classes = useStyles();
 
   return (
