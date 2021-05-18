@@ -13,6 +13,7 @@ const useStyles = createUseStyles({
 
     '& .card_img': {
       maxWidth: '100px',
+      maxHeight: '70px',
       width: '100%',
       height: '100%',
       marginRight: '10px',

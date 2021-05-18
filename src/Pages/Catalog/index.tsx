@@ -21,6 +21,7 @@ const Catalog: FC = () => {
     content: [],
     total: 0,
     facetFields: [],
+    marks: [],
   });
 
   const [pageData, setPageData] = useState<IPageData>({
@@ -89,14 +90,29 @@ const Catalog: FC = () => {
     setVehicleCount(copyVehicleCount);
   };
 
+  const fillingMarkArray = (array: any) => {
+    const MAKE: any = array?.filter(
+      (item: any) => item.quickPickCode === 'MAKE'
+    );
+    let result: string[] = [] ;
+
+    MAKE[0].facetCounts?.forEach((item: any) => {
+      result.push(item.displayName)
+    })
+
+    return result;
+  };
+
   useEffect(() => {
     getData(Object.assign(pageData, filters)).then((res) => {
       calcVehicleCount(res.data.data.results.facetFields);
+      const mark = fillingMarkArray(res.data.data.results.facetFields);
 
       setData({
         content: res.data.data.results.content,
         total: res.data.data.results.totalElements,
         facetFields: res.data.data.results.facetFields,
+        marks: mark,
       });
     });
   }, [pageData, filters]);

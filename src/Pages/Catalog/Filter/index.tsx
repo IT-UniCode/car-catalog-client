@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import { Collapse, Checkbox, Row } from 'antd';
 
 import {
@@ -22,7 +22,12 @@ interface IFilterProps {
   setFilterData: React.Dispatch<React.SetStateAction<IFilter | undefined>>;
 }
 
-const Filter: FC<IFilterProps> = ({ data, filterData, setFilterData, vehicleData }) => {
+const Filter: FC<IFilterProps> = ({
+  data,
+  filterData,
+  setFilterData,
+  vehicleData,
+}) => {
   const classes = useStyles();
 
   const changeFilter = (filterKey: string, filterValue: string[]) => {
@@ -111,9 +116,13 @@ const Filter: FC<IFilterProps> = ({ data, filterData, setFilterData, vehicleData
         </Panel>
         <Panel header='Марка' key='2'>
           <Checkbox.Group>
-            <Row>
-              <Checkbox onChange={() => changeFilter('', [''])}>Acura</Checkbox>
-            </Row>
+            {data.marks.map((item, index) => (
+              <Row key={index}>
+                <Checkbox value={item} onChange={() => changeFilter('', [''])}>
+                  {item}
+                </Checkbox>
+              </Row>
+            ))}
           </Checkbox.Group>
         </Panel>
       </Collapse>

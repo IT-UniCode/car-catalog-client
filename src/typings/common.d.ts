@@ -2,6 +2,7 @@ declare interface IData {
   content: IContent[];
   total: number;
   facetFields: any[];
+  marks: string[];
 }
 declare interface IContent {
   ld: string; //Год, название
