@@ -23,8 +23,6 @@ const Catalog: FC = () => {
 
   const [filters, setFilters] = useState<IFilter>();
 
-  console.log(Object.assign(pageData, filters));
-
   useEffect(() => {
     getData(Object.assign(pageData, filters)).then((res) => {
       setData({
