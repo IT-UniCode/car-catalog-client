@@ -10,7 +10,9 @@ const CustomFooter: FC = () => {
 
   return (
     <Footer className={classes.root}>
-      Car Catalog ©2021 Created by UniCode
+      <div className='container'>
+        Car Catalog ©2021 Created by UniCode
+      </div>
     </Footer>
   );
 };
