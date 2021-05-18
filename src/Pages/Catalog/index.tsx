@@ -17,22 +17,27 @@ const Catalog: FC = () => {
     currentPage: 1,
     page: 0,
     size: 10,
+    defaultSort: true,
+    sort: ['auction_date_type desc', 'auction_date_utc asc'],
   });
 
-  useEffect(() => {
-    getData(pageData).then((res) => {
+  const [filters, setFilters] = useState<IFilter>();
 
+  console.log(Object.assign(pageData, filters));
+
+  useEffect(() => {
+    getData(Object.assign(pageData, filters)).then((res) => {
       setData({
         content: res.data.data.results.content,
         total: res.data.data.results.totalElements,
       });
     });
-  }, [pageData]);
+  }, [pageData, filters]);
 
   return (
     <div className={classes.root}>
-      <Filter />
-      <Content data={data} pageData={pageData} setPageData={setPageData}/>
+      <Filter data={filters} setData={setFilters} />
+      <Content data={data} pageData={pageData} setPageData={setPageData} />
     </div>
   );
 };

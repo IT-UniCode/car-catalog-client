@@ -7,6 +7,7 @@ const useStyles = createUseStyles({
 
     '& .filter_item': {
       display: 'block',
+      cursor: 'pointer'
     }
   }
 });
