@@ -26,12 +26,12 @@ const Catalog: FC = () => {
         total: res.data.data.results.totalElements,
       });
     });
-  }, []);
+  }, [pageData]);
 
   return (
     <div className={classes.root}>
       <Filter />
-      <Content data={data} pageData={pageData}/>
+      <Content data={data} pageData={pageData} setPageData={setPageData}/>
     </div>
   );
 };
