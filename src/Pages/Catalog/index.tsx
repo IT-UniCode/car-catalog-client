@@ -14,6 +14,7 @@ const Catalog: FC = () => {
   });
 
   const [pageData, setPageData] = useState<IPageData>({
+    currentPage: 1,
     page: 0,
     size: 10,
   });

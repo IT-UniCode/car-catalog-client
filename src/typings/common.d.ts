@@ -49,6 +49,7 @@ declare interface IContent {
 }
 
 declare interface IPageData {
+  currentPage: number;
   page: number;
   size: number;
 }

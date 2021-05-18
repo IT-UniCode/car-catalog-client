@@ -16,21 +16,21 @@ const Content: FC<IContentProps> = ({ data, pageData, setPageData }) => {
 
   const changePage = (pageNum: number, pageSize: number | undefined) => {
     const copyPageData = {...pageData};
-    copyPageData.page = pageNum;
+    copyPageData.currentPage = pageNum;
+    copyPageData.page = pageNum - 1;
 
     if (pageSize) {
       copyPageData.size = pageSize;
     }
-    
+
     setPageData(copyPageData);
   };
 
   return (
     <div className={classes.root}>
       <Pagination
-        current={pageData.page}
-        defaultCurrent={1}
         total={data.total}
+        current={pageData.currentPage}
         onChange={(page, size) => changePage(page, size)}
       />
 
@@ -39,9 +39,8 @@ const Content: FC<IContentProps> = ({ data, pageData, setPageData }) => {
       ))}
 
       <Pagination
-        defaultCurrent={1}
-        current={pageData.page}
         total={data.total}
+        current={pageData.currentPage}
         onChange={(page, size) => changePage(page, size)}
       />
     </div>
