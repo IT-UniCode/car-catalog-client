@@ -3,6 +3,15 @@ import React, { FC, useEffect, useState } from 'react';
 import { getData } from '../../API/catalog';
 import Content from './Content';
 import Filter from './Filter';
+import {
+  VEHTYPE_Auto,
+  VEHTYPE_Boat,
+  VEHTYPE_Moto,
+  VEHTYPE_Truck,
+  VEHTYPE_RV,
+  VEHTYPE_Special,
+  VEHTYPE_Trailer,
+} from '../../utils/enums';
 
 import useStyles from './style';
 
@@ -11,6 +20,7 @@ const Catalog: FC = () => {
   const [data, setData] = useState<IData>({
     content: [],
     total: 0,
+    facetFields: [],
   });
 
   const [pageData, setPageData] = useState<IPageData>({
@@ -23,18 +33,82 @@ const Catalog: FC = () => {
 
   const [filters, setFilters] = useState<IFilter>();
 
+  const [vehicleCount, setVehicleCount] = useState<IVehicleCount>({
+    rv: 0,
+    auto: 0,
+    moto: 0,
+    boat: 0,
+    truck: 0,
+    special: 0,
+    trailers: 0,
+  });
+
+  const calcVehicleCount = async (array: any) => {
+    const VEHT: any = array?.filter(
+      (item: any) => item.quickPickCode === 'VEHT'
+    );
+
+    const copyVehicleCount = {
+      rv: 0,
+      auto: 0,
+      moto: 0,
+      boat: 0,
+      truck: 0,
+      special: 0,
+      trailers: 0,
+    };
+
+    await VEHT[0]?.facetCounts?.forEach((item: any) => {
+      switch (true) {
+        case Object.values(VEHTYPE_Auto).includes(item.query):
+          copyVehicleCount.auto += item.count;
+          break;
+        case Object.values(VEHTYPE_Moto).includes(item.query):
+          copyVehicleCount.moto += item.count;
+          break;
+        case Object.values(VEHTYPE_Truck).includes(item.query):
+          copyVehicleCount.truck += item.count;
+          break;
+        case Object.values(VEHTYPE_Trailer).includes(item.query):
+          copyVehicleCount.trailers += item.count;
+          break;
+        case Object.values(VEHTYPE_Boat).includes(item.query):
+          copyVehicleCount.boat += item.count;
+          break;
+        case Object.values(VEHTYPE_RV).includes(item.query):
+          copyVehicleCount.rv += item.count;
+          break;
+        case Object.values(VEHTYPE_Special).includes(item.query):
+          copyVehicleCount.special += item.count;
+          break;
+        default:
+          break;
+      }
+    });
+
+    setVehicleCount(copyVehicleCount);
+  };
+
   useEffect(() => {
     getData(Object.assign(pageData, filters)).then((res) => {
+      calcVehicleCount(res.data.data.results.facetFields);
+
       setData({
         content: res.data.data.results.content,
         total: res.data.data.results.totalElements,
+        facetFields: res.data.data.results.facetFields,
       });
     });
   }, [pageData, filters]);
 
   return (
     <div className={classes.root}>
-      <Filter data={filters} setData={setFilters} />
+      <Filter
+        data={data}
+        vehicleData={vehicleCount}
+        filterData={filters}
+        setFilterData={setFilters}
+      />
       <Content data={data} pageData={pageData} setPageData={setPageData} />
     </div>
   );

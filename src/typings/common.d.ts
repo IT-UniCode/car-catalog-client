@@ -1,6 +1,7 @@
 declare interface IData {
   content: IContent[];
   total: number;
+  facetFields: any[];
 }
 declare interface IContent {
   ld: string; //Год, название
@@ -57,4 +58,14 @@ declare interface IPageData {
 declare interface IFilter {
   [veht: string]: string[];
   [body: string]: string[];
+}
+
+declare interface IVehicleCount {
+  rv: number;
+  auto: number;
+  moto: number;
+  boat: number;
+  truck: number;
+  special: number;
+  trailers: number;
 }

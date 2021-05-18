@@ -1,6 +1,6 @@
 export enum VEHTYPE_Auto {
   automobile = 'vehicle_type_code:VEHTYPE_V',
-  pickup = 'vehicle_type_code:VEHTYPE_P',
+  pickup = 'vehicle_type_code:VEHCAT_P',
   suv = 'vehicle_type_code:VEHCAT_S',
 }
 
@@ -23,7 +23,7 @@ export enum VEHTYPE_Boat {
 
 export enum VEHTYPE_Special {
   industrial_equipment = 'vehicle_type_code:VEHTYPE_E',
-  fork_lifts = 'vehicle_type_code:VEHTYPE_F1',
+  fork_lifts = 'lot_features_code:LOTFEATURE_F1',
 }
 
 export enum VEHTYPE_Trailer {
