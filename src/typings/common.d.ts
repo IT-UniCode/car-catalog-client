@@ -3,6 +3,8 @@ declare interface IData {
   total: number;
   facetFields: any[];
   marks: string[];
+  models: string[],
+  vehicleCount: IVehicleCount;
 }
 declare interface IContent {
   ld: string; //Год, название
@@ -57,16 +59,32 @@ declare interface IPageData {
 }
 
 declare interface IFilter {
-  [veht: string]: string[];
-  [body: string]: string[];
+  [key: string]: string[];
+}
+
+declare interface IVEHTItem {
+  count: number;
+  displayName: string;
+  query: string;
+  uri: string;
+  quickPickCode: string;
 }
 
 declare interface IVehicleCount {
-  rv: number;
-  auto: number;
-  moto: number;
-  boat: number;
-  truck: number;
-  special: number;
+  [key: string]: number;
+  automobiles: number;
+  pickuptrucks: number;
+  suvs: number;
+  motorcycle: number;
+  atvs: number;
+  dirtbikes: number;
+  snowmobile: number;
+  heavydutytrucks: number;
+  mediumdutyboxtrucks: number;
+  boats: number;
+  jetskis: number;
+  industrialequipment: number;
+  forklifts: number;
   trailers: number;
+  recreationalveh: number;
 }

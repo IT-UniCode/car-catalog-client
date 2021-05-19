@@ -1,40 +1,33 @@
 import React, { FC } from 'react';
 import { Collapse, Checkbox, Row } from 'antd';
+import SimpleBar from 'simplebar-react';
+import 'simplebar/dist/simplebar.min.css';
 
-import {
-  FilterTypes,
-  VEHTYPE_Auto,
-  VEHTYPE_Boat,
-  VEHTYPE_Moto,
-  VEHTYPE_Truck,
-  VEHTYPE_RV,
-  VEHTYPE_Special,
-  VEHTYPE_Trailer,
-} from '../../../utils/enums';
+import { FilterTypes, VEHTYPE, NLTS_Params } from '../../../utils/enums';
 
 import useStyles from './style';
 
 const { Panel } = Collapse;
 interface IFilterProps {
   data: IData;
-  filterData: IFilter | undefined;
-  vehicleData: IVehicleCount;
-  setFilterData: React.Dispatch<React.SetStateAction<IFilter | undefined>>;
+  filterData: IFilter;
+  setFilterData: React.Dispatch<React.SetStateAction<IFilter>>;
 }
 
-const Filter: FC<IFilterProps> = ({
-  data,
-  filterData,
-  setFilterData,
-  vehicleData,
-}) => {
+const Filter: FC<IFilterProps> = ({ data, filterData, setFilterData }) => {
   const classes = useStyles();
 
-  const changeFilter = (filterKey: string, filterValue: string[]) => {
-    const copyData: IFilter = { ...filterData };
-    copyData[filterKey] = filterValue;
+  const changeFilter = (filterKey: string, filterValue: string) => {
+    const copyFilterData: IFilter = { ...filterData };
+    const index = copyFilterData[filterKey].indexOf(filterValue);
 
-    setFilterData(copyData);
+    if (index === -1) {
+      copyFilterData[filterKey].push(filterValue);
+    } else {
+      copyFilterData[filterKey].splice(index, 1);
+    }
+
+    setFilterData(copyFilterData);
   };
 
   return (
@@ -43,59 +36,99 @@ const Filter: FC<IFilterProps> = ({
       <ul>
         <li
           className='filter_item'
-          onClick={() =>
-            changeFilter(FilterTypes.VEHT, Object.values(VEHTYPE_Auto))
-          }
+          onClick={() => changeFilter(FilterTypes.VEHT, VEHTYPE.automobile)}
         >
-          Автомобили ({vehicleData.auto})
+          Автомобили ({data.vehicleCount.automobiles})
+        </li>
+        <li
+          className='filter_item'
+          onClick={() => changeFilter(FilterTypes.VEHT, VEHTYPE.suv)}
+        >
+          Внедорожники ({data.vehicleCount.suvs})
+        </li>
+        <li
+          className='filter_item'
+          onClick={() => changeFilter(FilterTypes.VEHT, VEHTYPE.pickup)}
+        >
+          Пикапы ({data.vehicleCount.pickuptrucks})
+        </li>
+        <li
+          className='filter_item'
+          onClick={() => changeFilter(FilterTypes.VEHT, VEHTYPE.motorcycle)}
+        >
+          Мотоциклы ({data.vehicleCount.motorcycle})
+        </li>
+        <li
+          className='filter_item'
+          onClick={() => changeFilter(FilterTypes.VEHT, VEHTYPE.ATV)}
+        >
+          АТВ ({data.vehicleCount.atvs})
+        </li>
+        <li
+          className='filter_item'
+          onClick={() => changeFilter(FilterTypes.VEHT, VEHTYPE.dirt_bike)}
+        >
+          Эндуро техника ({data.vehicleCount.dirtbikes})
+        </li>
+        <li
+          className='filter_item'
+          onClick={() => changeFilter(FilterTypes.VEHT, VEHTYPE.snowmobile)}
+        >
+          Снегоходы ({data.vehicleCount.snowmobile})
+        </li>
+        <li
+          className='filter_item'
+          onClick={() => changeFilter(FilterTypes.VEHT, VEHTYPE.boat)}
+        >
+          Лодки ({data.vehicleCount.boats})
+        </li>
+        <li
+          className='filter_item'
+          onClick={() => changeFilter(FilterTypes.VEHT, VEHTYPE.jet_ski)}
+        >
+          Гидроциклы ({data.vehicleCount.jetskis})
         </li>
         <li
           className='filter_item'
           onClick={() =>
-            changeFilter(FilterTypes.VEHT, Object.values(VEHTYPE_Moto))
+            changeFilter(FilterTypes.VEHT, VEHTYPE.heavy_duty_truck)
           }
         >
-          Мото техника ({vehicleData.moto})
+          Тяжолый грузовой транспорт ({data.vehicleCount.heavydutytrucks})
         </li>
         <li
           className='filter_item'
           onClick={() =>
-            changeFilter(FilterTypes.VEHT, Object.values(VEHTYPE_Boat))
+            changeFilter(FilterTypes.VEHT, VEHTYPE.medium_duty_truck)
           }
         >
-          Водный транспорт ({vehicleData.boat})
+          Средний грузовой транспорт ({data.vehicleCount.mediumdutyboxtrucks})
+        </li>
+        <li
+          className='filter_item'
+          onClick={() => changeFilter(FilterTypes.VEHT, VEHTYPE.RV)}
+        >
+          Дом на колесах ({data.vehicleCount.recreationalveh})
         </li>
         <li
           className='filter_item'
           onClick={() =>
-            changeFilter(FilterTypes.VEHT, Object.values(VEHTYPE_Truck))
+            changeFilter(FilterTypes.VEHT, VEHTYPE.industrial_equipment)
           }
         >
-          Грузовой транспорт ({vehicleData.truck})
+          Промышленное оборудование ({data.vehicleCount.industrialequipment})
         </li>
         <li
           className='filter_item'
-          onClick={() =>
-            changeFilter(FilterTypes.VEHT, Object.values(VEHTYPE_RV))
-          }
+          onClick={() => changeFilter(FilterTypes.VEHT, VEHTYPE.fork_lift)}
         >
-          Дом на колесах ({vehicleData.rv})
+          Погрузчики ({data.vehicleCount.forklifts})
         </li>
         <li
           className='filter_item'
-          onClick={() =>
-            changeFilter(FilterTypes.VEHT, Object.values(VEHTYPE_Special))
-          }
+          onClick={() => changeFilter(FilterTypes.VEHT, VEHTYPE.trailer)}
         >
-          Спецтехника ({vehicleData.special})
-        </li>
-        <li
-          className='filter_item'
-          onClick={() =>
-            changeFilter(FilterTypes.VEHT, Object.values(VEHTYPE_Trailer))
-          }
-        >
-          Прицепы ({vehicleData.trailers})
+          Прицепы ({data.vehicleCount.trailers})
         </li>
       </ul>
       <h2>Фильтр</h2>
@@ -103,27 +136,64 @@ const Filter: FC<IFilterProps> = ({
         <Panel header='Недавно добавленные лоты' key='1'>
           <Checkbox.Group>
             <Row>
-              <Checkbox onChange={() => changeFilter('', [''])}>
+              <Checkbox
+                value={NLTS_Params.lastDay}
+                onChange={(e) => changeFilter(FilterTypes.NLTS, e.target.value)}
+              >
                 За последние 24 часа
               </Checkbox>
             </Row>
             <Row>
-              <Checkbox onChange={() => changeFilter('', [''])}>
+              <Checkbox
+                value={NLTS_Params.lastWeek}
+                onChange={(e) => changeFilter(FilterTypes.NLTS, e.target.value)}
+              >
                 За последние 7 дней
               </Checkbox>
             </Row>
           </Checkbox.Group>
         </Panel>
         <Panel header='Марка' key='2'>
-          <Checkbox.Group>
-            {data.marks.map((item, index) => (
-              <Row key={index}>
-                <Checkbox value={item} onChange={() => changeFilter('', [''])}>
-                  {item}
-                </Checkbox>
-              </Row>
-            ))}
-          </Checkbox.Group>
+          <SimpleBar style={{ maxHeight: 200 }}>
+            <Checkbox.Group>
+              {data.marks.map((item: any, index) => (
+                <Row key={index}>
+                  <Checkbox
+                    value={item.displayName}
+                    onChange={(e) =>
+                      changeFilter(
+                        FilterTypes.MAKE,
+                        `lot_make_desc:${e.target.value.toUpperCase()}`
+                      )
+                    }
+                  >
+                    {item.displayName}
+                  </Checkbox>
+                </Row>
+              ))}
+            </Checkbox.Group>
+          </SimpleBar>
+        </Panel>
+        <Panel header='Модель' key='3'>
+          <SimpleBar style={{ maxHeight: 200 }}>
+            <Checkbox.Group>
+              {data.models.map((item: any, index) => (
+                <Row key={index}>
+                  <Checkbox
+                    value={item.displayName}
+                    onChange={(e) =>
+                      changeFilter(
+                        FilterTypes.MODL,
+                        `lot_model_desc:${e.target.value.toUpperCase()}`
+                      )
+                    }
+                  >
+                    {item.displayName}
+                  </Checkbox>
+                </Row>
+              ))}
+            </Checkbox.Group>
+          </SimpleBar>
         </Panel>
       </Collapse>
     </div>

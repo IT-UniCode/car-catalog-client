@@ -1,40 +1,30 @@
-export enum VEHTYPE_Auto {
+export enum VEHTYPE {
   automobile = 'vehicle_type_code:VEHTYPE_V',
   pickup = 'vehicle_type_code:VEHCAT_P',
   suv = 'vehicle_type_code:VEHCAT_S',
-}
-
-export enum VEHTYPE_Moto {
   motorcycle = 'vehicle_type_code:VEHTYPE_C',
   ATV = 'vehicle_type_code:VEHTYPE_A',
-  ditt_bikes = 'vehicle_type_code:VEHTYPE_D',
+  dirt_bike = 'vehicle_type_code:VEHTYPE_D',
   snowmobile = 'vehicle_type_code:VEHTYPE_S',
-}
-
-export enum VEHTYPE_Truck {
   heavy_duty_truck = 'vehicle_type_code:VEHTYPE_U',
   medium_duty_truck = 'vehicle_type_code:VEHTYPE_K',
-}
-
-export enum VEHTYPE_Boat {
-  boats = 'vehicle_type_code:VEHTYPE_M',
+  boat = 'vehicle_type_code:VEHTYPE_M',
   jet_ski = 'vehicle_type_code:VEHTYPE_J',
-}
-
-export enum VEHTYPE_Special {
   industrial_equipment = 'vehicle_type_code:VEHTYPE_E',
-  fork_lifts = 'lot_features_code:LOTFEATURE_F1',
-}
-
-export enum VEHTYPE_Trailer {
-  traler = 'vehicle_type_code:VEHTYPE_L',
-}
-
-export enum VEHTYPE_RV {
+  fork_lift = 'lot_features_code:LOTFEATURE_F1',
+  trailer = 'vehicle_type_code:VEHTYPE_L',
   RV = 'vehicle_type_code:VEHTYPE_R',
+}
+
+export enum NLTS_Params {
+  lastDay = 'expected_sale_assigned_ts_utc:[NOW/DAY-1DAY TO NOW/DAY]',
+  lastWeek = 'expected_sale_assigned_ts_utc:[NOW/DAY-7DAY TO NOW/DAY]',
 }
 
 export enum FilterTypes {
   VEHT = 'filter[VEHT]',
   BODY = 'filter[BODY]',
+  MAKE = 'filter[MAKE]',
+  NLTS = 'filter[NLTS]',
+  MODL = 'filter[MODL]',
 }

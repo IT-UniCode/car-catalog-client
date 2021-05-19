@@ -3,15 +3,6 @@ import React, { FC, useEffect, useState } from 'react';
 import { getData } from '../../API/catalog';
 import Content from './Content';
 import Filter from './Filter';
-import {
-  VEHTYPE_Auto,
-  VEHTYPE_Boat,
-  VEHTYPE_Moto,
-  VEHTYPE_Truck,
-  VEHTYPE_RV,
-  VEHTYPE_Special,
-  VEHTYPE_Trailer,
-} from '../../utils/enums';
 
 import useStyles from './style';
 
@@ -22,6 +13,24 @@ const Catalog: FC = () => {
     total: 0,
     facetFields: [],
     marks: [],
+    models: [],
+    vehicleCount: {
+      automobiles: 0,
+      pickuptrucks: 0,
+      suvs: 0,
+      motorcycle: 0,
+      atvs: 0,
+      dirtbikes: 0,
+      snowmobile: 0,
+      heavydutytrucks: 0,
+      mediumdutyboxtrucks: 0,
+      boats: 0,
+      jetskis: 0,
+      industrialequipment: 0,
+      forklifts: 0,
+      trailers: 0,
+      recreationalveh: 0,
+    },
   });
 
   const [pageData, setPageData] = useState<IPageData>({
@@ -32,99 +41,73 @@ const Catalog: FC = () => {
     sort: ['auction_date_type desc', 'auction_date_utc asc'],
   });
 
-  const [filters, setFilters] = useState<IFilter>();
-
-  const [vehicleCount, setVehicleCount] = useState<IVehicleCount>({
-    rv: 0,
-    auto: 0,
-    moto: 0,
-    boat: 0,
-    truck: 0,
-    special: 0,
-    trailers: 0,
+  const [filters, setFilters] = useState<IFilter>({
+    'filter[VEHT]': [],
+    'filter[BODY]': [],
+    'filter[MAKE]': [],
+    'filter[NLTS]': [],
+    'filter[MODL]': [],
   });
 
-  const calcVehicleCount = async (array: any) => {
+  const calcVehicleCount = (array: any) => {
     const VEHT: any = array?.filter(
       (item: any) => item.quickPickCode === 'VEHT'
     );
 
-    const copyVehicleCount = {
-      rv: 0,
-      auto: 0,
-      moto: 0,
-      boat: 0,
-      truck: 0,
-      special: 0,
+    const vehicleCount: IVehicleCount = {
+      automobiles: 0,
+      pickuptrucks: 0,
+      suvs: 0,
+      motorcycle: 0,
+      atvs: 0,
+      dirtbikes: 0,
+      snowmobile: 0,
+      heavydutytrucks: 0,
+      mediumdutyboxtrucks: 0,
+      boats: 0,
+      jetskis: 0,
+      industrialequipment: 0,
+      forklifts: 0,
       trailers: 0,
+      recreationalveh: 0,
     };
 
-    await VEHT[0]?.facetCounts?.forEach((item: any) => {
-      switch (true) {
-        case Object.values(VEHTYPE_Auto).includes(item.query):
-          copyVehicleCount.auto += item.count;
-          break;
-        case Object.values(VEHTYPE_Moto).includes(item.query):
-          copyVehicleCount.moto += item.count;
-          break;
-        case Object.values(VEHTYPE_Truck).includes(item.query):
-          copyVehicleCount.truck += item.count;
-          break;
-        case Object.values(VEHTYPE_Trailer).includes(item.query):
-          copyVehicleCount.trailers += item.count;
-          break;
-        case Object.values(VEHTYPE_Boat).includes(item.query):
-          copyVehicleCount.boat += item.count;
-          break;
-        case Object.values(VEHTYPE_RV).includes(item.query):
-          copyVehicleCount.rv += item.count;
-          break;
-        case Object.values(VEHTYPE_Special).includes(item.query):
-          copyVehicleCount.special += item.count;
-          break;
-        default:
-          break;
-      }
+    VEHT[0]?.facetCounts?.forEach((item: IVEHTItem) => {
+      vehicleCount[item.uri] = item.count;
     });
 
-    setVehicleCount(copyVehicleCount);
+    return vehicleCount;
   };
 
-  const fillingMarkArray = (array: any) => {
-    const MAKE: any = array?.filter(
-      (item: any) => item.quickPickCode === 'MAKE'
-    );
-    let result: string[] = [] ;
+  const fillingData = (array: any) => {
+    let result: IFilter = {};
 
-    MAKE[0].facetCounts?.forEach((item: any) => {
-      result.push(item.displayName)
-    })
+    array?.forEach((item: any) => {
+      result[item.quickPickCode] = (item.facetCounts);
+    });
 
     return result;
   };
 
   useEffect(() => {
     getData(Object.assign(pageData, filters)).then((res) => {
-      calcVehicleCount(res.data.data.results.facetFields);
-      const mark = fillingMarkArray(res.data.data.results.facetFields);
+      const vehicleCount = calcVehicleCount(res.data.data.results.facetFields);
+      const filledData = fillingData(res.data.data.results.facetFields);
 
       setData({
         content: res.data.data.results.content,
         total: res.data.data.results.totalElements,
         facetFields: res.data.data.results.facetFields,
-        marks: mark,
+        vehicleCount: vehicleCount,
+        marks: filledData.MAKE,
+        models: filledData.MODL,
       });
     });
   }, [pageData, filters]);
 
   return (
     <div className={classes.root}>
-      <Filter
-        data={data}
-        vehicleData={vehicleCount}
-        filterData={filters}
-        setFilterData={setFilters}
-      />
+      <Filter data={data} filterData={filters} setFilterData={setFilters} />
       <Content data={data} pageData={pageData} setPageData={setPageData} />
     </div>
   );
