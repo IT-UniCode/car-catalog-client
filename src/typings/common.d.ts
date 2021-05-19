@@ -1,7 +1,38 @@
 declare interface IData {
   content: IContent[];
   total: number;
+  facetFields?: {
+    newly: IFacetData;
+    marks: IFacetData;
+    models: IFacetData;
+    years: IFacetData;
+    mileage: IFacetData;
+    locations: IFacetData;
+    saleNames: IFacetData;
+    saleDates: IFacetData;
+    documents: IFacetData;
+    sources: IFacetData;
+    damages: IFacetData;
+    body: IFacetData;
+    fuelTypes: IFacetData;
+    engineTypes: IFacetData;
+    transmission: IFacetData;
+    driveTrain: IFacetData;
+    cylinders: IFacetData;
+  };
+  vehicleCount: IVehicleCount;
 }
+
+declare interface IFacetData {
+  displayName: string;
+  facetCounts: string[];
+  quickPickCode: string;
+}
+
+declare interface IDataResult {
+  [key: string]: IFacetData;
+}
+
 declare interface IContent {
   ld: string; //Год, название
   lcy: number; //Год
@@ -55,6 +86,32 @@ declare interface IPageData {
 }
 
 declare interface IFilter {
-  [veht: string]: string[];
-  [body: string]: string[];
+  [key: string]: string[];
+}
+
+declare interface IVEHTItem {
+  count: number;
+  displayName: string;
+  query: string;
+  uri: string;
+  quickPickCode: string;
+}
+
+declare interface IVehicleCount {
+  [key: string]: number;
+  automobiles: number;
+  pickuptrucks: number;
+  suvs: number;
+  motorcycle: number;
+  atvs: number;
+  dirtbikes: number;
+  snowmobile: number;
+  heavydutytrucks: number;
+  mediumdutyboxtrucks: number;
+  boats: number;
+  jetskis: number;
+  industrialequipment: number;
+  forklifts: number;
+  trailers: number;
+  recreationalveh: number;
 }
