@@ -42,6 +42,7 @@ const Filter: FC<IFilterProps> = ({
   return (
     <div className={classes.root}>
       <h2>Каталог ({data?.total})</h2>
+      <SimpleBar style={{ maxHeight: 400 }}>
       {data?.vehicle &&
         Object.values(data?.vehicle.facetCounts).map(
           (item: IFacetCount, index: number) => (
@@ -55,6 +56,7 @@ const Filter: FC<IFilterProps> = ({
             </Button>
           )
         )}
+                  </SimpleBar>
       <h2>Фильтр</h2>
       <SimpleBar style={{ maxHeight: '100vh' }}>
         <Collapse defaultActiveKey={['0']}>
