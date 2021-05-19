@@ -12,9 +12,15 @@ interface IFilterProps {
   data?: IData;
   filterData: IFilter;
   setFilterData: React.Dispatch<React.SetStateAction<IFilter>>;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Filter: FC<IFilterProps> = ({ data, filterData, setFilterData }) => {
+const Filter: FC<IFilterProps> = ({
+  data,
+  filterData,
+  setFilterData,
+  setLoading,
+}) => {
   const classes = useStyles();
 
   const changeFilter = (filterKey: string, filterValue: string) => {
@@ -28,6 +34,7 @@ const Filter: FC<IFilterProps> = ({ data, filterData, setFilterData }) => {
     }
 
     setFilterData(copyFilterData);
+    setLoading(true);
   };
 
   return (
@@ -132,34 +139,36 @@ const Filter: FC<IFilterProps> = ({ data, filterData, setFilterData }) => {
         </li>
       </ul>
       <h2>Фильтр</h2>
-      <Collapse defaultActiveKey={['0']}>
-        {data?.facetFields &&
-          Object.values(data?.facetFields).map(
-            (filter: IFacetData, index: number) => (
-              <Panel header={filter.displayName} key={index}>
-                <SimpleBar style={{ maxHeight: 200 }}>
-                  <Checkbox.Group>
-                    {filter.facetCounts.map((item: any, index: number) => (
-                      <Row key={index}>
-                        <Checkbox
-                          value={item.displayName}
-                          onChange={() =>
-                            changeFilter(
-                              `filter[${filter.quickPickCode}]`,
-                              item.query
-                            )
-                          }
-                        >
-                          {item.displayName}
-                        </Checkbox>
-                      </Row>
-                    ))}
-                  </Checkbox.Group>
-                </SimpleBar>
-              </Panel>
-            )
-          )}
-      </Collapse>
+      <SimpleBar style={{ maxHeight: '100vh' }}>
+        <Collapse defaultActiveKey={['0']}>
+          {data?.facetFields &&
+            Object.values(data?.facetFields).map(
+              (filter: IFacetData, index: number) => (
+                <Panel header={filter.displayName} key={index}>
+                  <SimpleBar style={{ maxHeight: 200 }}>
+                    <Checkbox.Group>
+                      {filter.facetCounts.map((item: any, index: number) => (
+                        <Row key={index}>
+                          <Checkbox
+                            value={item.displayName}
+                            onChange={() =>
+                              changeFilter(
+                                `filter[${filter.quickPickCode}]`,
+                                item.query
+                              )
+                            }
+                          >
+                            {item.displayName}
+                          </Checkbox>
+                        </Row>
+                      ))}
+                    </Checkbox.Group>
+                  </SimpleBar>
+                </Panel>
+              )
+            )}
+        </Collapse>
+      </SimpleBar>
     </div>
   );
 };
