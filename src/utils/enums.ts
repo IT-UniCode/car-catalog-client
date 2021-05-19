@@ -16,15 +16,23 @@ export enum VEHTYPE {
   RV = 'vehicle_type_code:VEHTYPE_R',
 }
 
-export enum NLTS_Params {
-  lastDay = 'expected_sale_assigned_ts_utc:[NOW/DAY-1DAY TO NOW/DAY]',
-  lastWeek = 'expected_sale_assigned_ts_utc:[NOW/DAY-7DAY TO NOW/DAY]',
-}
-
 export enum FilterTypes {
   VEHT = 'filter[VEHT]',
   BODY = 'filter[BODY]',
   MAKE = 'filter[MAKE]',
   NLTS = 'filter[NLTS]',
   MODL = 'filter[MODL]',
-}
+  YEAR = 'filter[YEAR]',
+  ODM = 'filter[ODM]',
+  LOC = 'filter[LOC]',
+  SLOC = 'filter[SLOC]',
+  SDAT = 'filter[SDAT]',
+  TITL = 'filter[TITL]',
+  SRCE = 'filter[SRCE]',
+  PRID = 'filter[PRID]',
+  FUEL = 'filter[FUEL]',
+  ENGN = 'filter[ENGN]',
+  TMTP = 'filter[TMTP]',
+  DRIV = 'filter[DRIV]',
+  CYLN = 'filter[CYLN]',
+} 

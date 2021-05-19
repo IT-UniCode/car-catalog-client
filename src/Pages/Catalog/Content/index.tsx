@@ -6,7 +6,7 @@ import Card from './ContentCard';
 import useStyles from './style';
 
 interface IContentProps {
-  data: IData;
+  data: IData | undefined;
   pageData: IPageData;
   setPageData: React.Dispatch<React.SetStateAction<IPageData>>;
 }
@@ -29,17 +29,17 @@ const Content: FC<IContentProps> = ({ data, pageData, setPageData }) => {
   return (
     <div className={classes.root}>
       <Pagination
-        total={data.total}
+        total={data?.total}
         current={pageData.currentPage}
         onChange={(page, size) => changePage(page, size)}
       />
 
-      {data.content?.map((item, index) => (
+      {data?.content?.map((item, index) => (
         <Card data={item} key={index} />
       ))}
 
       <Pagination
-        total={data.total}
+        total={data?.total}
         current={pageData.currentPage}
         onChange={(page, size) => changePage(page, size)}
       />
