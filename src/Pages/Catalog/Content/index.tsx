@@ -9,13 +9,19 @@ interface IContentProps {
   data: IData | undefined;
   pageData: IPageData;
   setPageData: React.Dispatch<React.SetStateAction<IPageData>>;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Content: FC<IContentProps> = ({ data, pageData, setPageData }) => {
+const Content: FC<IContentProps> = ({
+  data,
+  pageData,
+  setPageData,
+  setLoading,
+}) => {
   const classes = useStyles();
 
   const changePage = (pageNum: number, pageSize: number | undefined) => {
-    const copyPageData = {...pageData};
+    const copyPageData = { ...pageData };
     copyPageData.currentPage = pageNum;
     copyPageData.page = pageNum - 1;
 
@@ -24,6 +30,7 @@ const Content: FC<IContentProps> = ({ data, pageData, setPageData }) => {
     }
 
     setPageData(copyPageData);
+    setLoading(true);
   };
 
   return (
