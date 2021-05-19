@@ -10,7 +10,12 @@ const useStyles = createUseStyles({
       margin: '10px 0',
       display: 'block',
       cursor: 'pointer',
-
+      border: 'none',
+      boxShadow: 'none',
+      background: 'transparent',
+      width: '100%',
+      textAlign: 'left',
+      
       '&:hover': {
         textDecoration: 'underline',
       },

@@ -1,0 +1,17 @@
+export const VEHICLE_TYPES: IVEHT = {
+  automobiles: 'Автомобили',
+  pickuptrucks: 'Пикапы',
+  suvs: 'Внедорожники',
+  motorcycle: 'Мотоциклы',
+  atvs: 'Квадроциклы',
+  dirtbikes: 'Эндуро мотоциклы',
+  snowmobile: 'Снегоходы',
+  heavydutytrucks: 'Тяжелый грузовой транспорт',
+  mediumdutyboxtrucks: 'Средний грузовой транспорт',
+  boats: 'Лодки',
+  jetskis: 'Гидроциклы',
+  industrialequipment: 'Промышленное оборудование',
+  forklifts: 'Погрузчики',
+  trailers: 'Прицепы',
+  recreationalveh: 'Дом на колесах',
+};

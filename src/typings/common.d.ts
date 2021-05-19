@@ -1,6 +1,7 @@
 declare interface IData {
   content: IContent[];
   total: number;
+  vehicle: IFacetData;
   facetFields?: {
     newly: IFacetData;
     marks: IFacetData;
@@ -20,17 +21,42 @@ declare interface IData {
     driveTrain: IFacetData;
     cylinders: IFacetData;
   };
-  vehicleCount: IVehicleCount;
 }
 
 declare interface IFacetData {
   displayName: string;
-  facetCounts: string[];
+  facetCounts: IFacetCount[];
   quickPickCode: string;
+  query: string;
+  count: string;
+  uri: string;
+}
+
+declare interface IFacetCount {
+  displayName: string;
+  query: string;
+  count: string;
+  uri: string;
 }
 
 declare interface IDataResult {
   [key: string]: IFacetData;
+}
+
+declare interface IPageData {
+  currentPage: number;
+  page: number;
+  size: number;
+  defaultSort: boolean;
+  sort: string[];
+}
+
+declare interface IVEHT {
+  [key: string]: string;
+}
+
+declare interface IFilter {
+  [key: string]: string[];
 }
 
 declare interface IContent {
@@ -75,43 +101,4 @@ declare interface IContent {
   tims: string; //IMG
   cuc: string; //Валюта
   la: string; //Оценочная розничная стоимость
-}
-
-declare interface IPageData {
-  currentPage: number;
-  page: number;
-  size: number;
-  defaultSort: boolean;
-  sort: string[];
-}
-
-declare interface IFilter {
-  [key: string]: string[];
-}
-
-declare interface IVEHTItem {
-  count: number;
-  displayName: string;
-  query: string;
-  uri: string;
-  quickPickCode: string;
-}
-
-declare interface IVehicleCount {
-  [key: string]: number;
-  automobiles: number;
-  pickuptrucks: number;
-  suvs: number;
-  motorcycle: number;
-  atvs: number;
-  dirtbikes: number;
-  snowmobile: number;
-  heavydutytrucks: number;
-  mediumdutyboxtrucks: number;
-  boats: number;
-  jetskis: number;
-  industrialequipment: number;
-  forklifts: number;
-  trailers: number;
-  recreationalveh: number;
 }

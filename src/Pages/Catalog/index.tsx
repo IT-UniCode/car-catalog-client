@@ -42,36 +42,6 @@ const Catalog: FC = () => {
     'filter[DRIV]': [],
   });
 
-  const calcVehicleCount = (array: any) => {
-    const VEHT: any = array?.filter(
-      (item: any) => item.quickPickCode === 'VEHT'
-    );
-
-    const vehicleCount: IVehicleCount = {
-      automobiles: 0,
-      pickuptrucks: 0,
-      suvs: 0,
-      motorcycle: 0,
-      atvs: 0,
-      dirtbikes: 0,
-      snowmobile: 0,
-      heavydutytrucks: 0,
-      mediumdutyboxtrucks: 0,
-      boats: 0,
-      jetskis: 0,
-      industrialequipment: 0,
-      forklifts: 0,
-      trailers: 0,
-      recreationalveh: 0,
-    };
-
-    VEHT[0]?.facetCounts?.forEach((item: IVEHTItem) => {
-      vehicleCount[item.uri] = item.count;
-    });
-
-    return vehicleCount;
-  };
-
   const fillingData = (array: any) => {
     let result: IDataResult = {};
 
@@ -84,13 +54,12 @@ const Catalog: FC = () => {
 
   useEffect(() => {
     getData(Object.assign(pageData, filters)).then((res) => {
-      const vehicleCount = calcVehicleCount(res.data.data.results.facetFields);
       const filledData = fillingData(res.data.data.results.facetFields);
 
       setData({
         content: res.data.data.results.content,
         total: res.data.data.results.totalElements,
-        vehicleCount: vehicleCount,
+        vehicle: filledData.VEHT,
         facetFields: {
           newly: filledData.NLTS,
           marks: filledData.MAKE,
@@ -114,6 +83,8 @@ const Catalog: FC = () => {
       setLoading(false);
     });
   }, [pageData, filters]);
+
+  console.log(data);
 
   return (
     <Spin spinning={loading} size='large' indicator={spinIcon}>
