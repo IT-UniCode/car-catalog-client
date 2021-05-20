@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { Button } from 'antd';
 
 import useStyles from './style';
+import { Link } from 'react-router-dom';
 
 interface ICardProps {
   data: IContent;
@@ -31,7 +32,9 @@ const Card: FC<ICardProps> = ({ data }) => {
               {data.syn} {data.locCity}/{data.al || '-'}/{data.gr}
             </p>
           </div>
-          <Button className='card_btn'>Подробнее</Button>
+          <Button className='card_btn'>
+            <Link to={`catalog/${data.ln}`}>Подробнее</Link>
+          </Button>
         </div>
       </div>
     </div>
