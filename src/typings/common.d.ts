@@ -55,6 +55,10 @@ declare interface IVEHT {
   [key: string]: string;
 }
 
+declare interface IImageListItem {
+  url: string;
+}
+
 declare interface IFilter {
   [key: string]: string[];
 }
@@ -101,4 +105,5 @@ declare interface IContent {
   tims: string; //IMG
   cuc: string; //Валюта
   la: string; //Оценочная розничная стоимость
+  imageList: IImageListItem[];
 }
