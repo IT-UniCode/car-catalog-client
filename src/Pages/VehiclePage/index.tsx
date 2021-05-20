@@ -3,25 +3,67 @@ import { useHistory } from 'react-router';
 import { Carousel } from 'antd';
 import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
+import SimpleBar from 'simplebar-react';
+import 'simplebar/dist/simplebar.min.css';
 
 import { getDataById } from '../../API/catalog';
 
 import useStyles from './style';
+
+interface IVehicleData {
+  key: string;
+  value: string | number;
+}
+
+interface IVehicle {
+  title: string;
+  vehicleData: IVehicleData[];
+  imageList: IImageListItem[];
+}
 
 const spinIcon = <LoadingOutlined style={{ fontSize: 84 }} spin />;
 
 const VehiclePage = () => {
   const classes = useStyles();
   const history = useHistory();
-  const [data, setData] = useState<IContent | undefined>();
+  const [data, setData] = useState<IVehicle | undefined>();
   const [loading, setLoading] = useState(true);
+
+  const fillingData = (array: IContent) => {
+    const result = [
+      { key: '№ лота:', value: array.ln },
+      { key: 'Номер VIN:', value: array.fv || '-' },
+      { key: 'Тип документа:', value: `${array.locState} - ${array.td}` },
+      { key: 'Одометр:', value: array.ord || '-' },
+      { key: 'Основные моменты:', value: array.lcd || '-' },
+      { key: 'Основное повреждение:', value: array.dd || '-' },
+      { key: 'Вторичное повреждение:', value: array.sdd || '-' },
+      { key: 'Оценочная розничная стоимость: ', value: array.la || '-' },
+      { key: 'Тип кузова:', value: array.bstl || '-' },
+      { key: 'Классификация ТС:', value: array.vehTypDesc || '-' },
+      { key: 'Цвет:', value: array.clr || '-' },
+      { key: 'Тип двигателя:', value: array.egn || '-' },
+      { key: 'Цилиндры:', value: array.cy || '-' },
+      { key: 'Передача:', value: array.tsmn || '-' },
+      { key: 'Привод:', value: array.drv || '-' },
+      { key: 'Топливо:', value: array.ft || '-' },
+      { key: 'Ключи:', value: array.hk || '-' },
+      { key: 'Примечания:', value: array.ltnte || '-' },
+    ];
+
+    return result;
+  };
 
   useEffect(() => {
     const pathName = history.location.pathname.split('/');
 
     getDataById(pathName[pathName.length - 1]).then((res) => {
+      const filledData = fillingData(res.data[0].data.lotDetails);
+      console.log(filledData);
+
       setData({
-        ...res.data[0].data.lotDetails,
+        title: res.data[0].data.lotDetails.ld,
+        vehicleData: filledData,
         imageList: res.data[1].data.imagesList.FULL_IMAGE,
       });
       setLoading(false);
@@ -31,7 +73,7 @@ const VehiclePage = () => {
   return (
     <Spin spinning={loading} size='large' indicator={spinIcon}>
       <div className={classes.root}>
-        <h2>{data?.ld}</h2>
+        <h2>{data?.title}</h2>
         <div className='vehicle_inner'>
           <div className='image_carusel-wrapper'>
             <Carousel autoplay className='image_carusel'>
@@ -43,24 +85,14 @@ const VehiclePage = () => {
             </Carousel>
           </div>
           <div className='vehicle_charateristic'>
-            <h4>№ лота: {data?.ln}</h4>
-            <p>Номер VIN: {data?.fv || '-'}</p>
-            <p>Тип документа: {data?.locState} - {data?.td}</p>
-            <p>Одометр: {data?.orr} {data?.ord}</p>
-            <p>Основные моменты: {data?.lcd}</p>
-            <p>Основное повреждение: {data?.dd}</p>
-            <p>Вторичное повреждение: {data?.sdd}</p>
-            <p>Оценочная розничная стоимость: {data?.la}</p>
-            <p>Тип кузова: {data?.bstl}</p>
-            <p>Классификация ТС: {data?.vehTypDesc}</p>
-            <p>Цвет: {data?.clr}</p>
-            <p>Тип двигателя: {data?.egn}</p>
-            <p>Цилиндры: {data?.cy}</p>
-            <p>Передача: {data?.tsmn}</p>
-            <p>Привод: {data?.drv}</p>
-            <p>Топливо: {data?.ft}</p>
-            <p>Ключи: {data?.hk}</p>
-            <p>Примечания: {data?.ltnte}</p>
+            <SimpleBar style={{ maxHeight: 400 }}>
+              {data?.vehicleData?.map((item: IVehicleData, index: number) => (
+                <div key={index} className='charateristic_item'>
+                  <p className='charateristic_item-key'>{item.key}</p>
+                  <p className='charateristic_item-value'>{item.value}</p>
+                </div>
+              ))}
+            </SimpleBar>
           </div>
         </div>
       </div>

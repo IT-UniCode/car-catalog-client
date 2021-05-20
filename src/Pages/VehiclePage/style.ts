@@ -8,6 +8,7 @@ const useStyles = createUseStyles({
       '& .image_carusel-wrapper': {
         maxWidth: '600px',
         width: '100%',
+        maxHeight: '450px',
       },
 
       '& .image_carusel': {
@@ -15,6 +16,7 @@ const useStyles = createUseStyles({
 
         '& .image_block img': {
           width: '100%',
+          height: '100%',
         },
       },
 
@@ -23,6 +25,19 @@ const useStyles = createUseStyles({
         padding: '10px',
         width: '100%',
         backgroundColor: '#FFF',
+
+        '& .charateristic_item': {
+          display: 'flex',
+          justifyContent: 'space-between',
+          borderBottom: '1px solid #000',
+          padding: '5px',
+
+          '& .charateristic_item-key': {
+            fontWeight: '500',
+          },
+
+          '& .charateristic_item-value': {},
+        },
       },
     },
   },
