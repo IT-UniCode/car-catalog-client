@@ -64,46 +64,43 @@ declare interface IFilter {
 }
 
 declare interface IContent {
-  ld: string; //Год, название
-  lcy: number; //Год
-  mkn: string; //Марка
-  km: string; //Модель
-
-  ln: number; //№ лота
-  fv: string; //VIN
-  locCity: string; //Город
-  locCountry: string; //Страна
-  locState: string; //Штат
-  td: string; //+Тип документа
-  orr: number; //Одометр
-  ord: string; //Тип пробега
-  lcd: string; //Основные моменты
-  dd: string; //Основные повреждения
-  bstl: string; //Тип кузова
-  vehTypDesc: string; //Классификация
-  clr: string; //Цвет
-  egn: string; //Тип двигателя
-  cy: string; //Количество цилиндров
-  tmtp: string; //Коробка передач
-  drv: string; //Привод
-  ft: string; //Топливо
-  hk: string; //Ключи
-
-  hb: number; //Текущяя ставка
-  bnp: number; //Минимальная ставка для покупки лота
-  syn: string; //Местонахождение лота
-  ad: number; //Дата продажи(мс)
-
-  syn: string; //Площадка
-  al: string; //Участок(Очередь)
-  aan: number; //№ позиции
-  gr: string; //сетка/ряд
-
-  lu: number; //Последнее обновление(мс)
-  brand: string; //COPART
-
-  tims: string; //IMG
-  cuc: string; //Валюта
-  la: string; //Оценочная розничная стоимость
+  ld: string;
+  lcy: number;
+  mkn: string;
+  km: string;
+  ln: number;
+  fv: string;
+  locCity: string;
+  locCountry: string;
+  locState: string;
+  td: string;
+  orr: number;
+  ord: string;
+  lcd: string;
+  dd: string;
+  bstl: string;
+  vehTypDesc: string;
+  clr: string;
+  egn: string;
+  cy: string;
+  tsmn: string;
+  drv: string;
+  ft: string;
+  hk: string;
+  sdd: string;
+  hb: number;
+  bnp: number;
+  syn: string;
+  ad: number;
+  syn: string;
+  al: string;
+  aan: number;
+  gr: string;
+  lu: number;
+  brand: string;
+  tims: string;
+  cuc: string;
+  la: string;
+  ltnte: string;
   imageList: IImageListItem[];
 }
