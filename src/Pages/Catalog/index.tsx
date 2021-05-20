@@ -84,8 +84,6 @@ const Catalog: FC = () => {
     });
   }, [pageData, filters]);
 
-  console.log(data);
-
   return (
     <Spin spinning={loading} size='large' indicator={spinIcon}>
       <div className={classes.root}>

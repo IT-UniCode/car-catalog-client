@@ -37,26 +37,24 @@ const Filter: FC<IFilterProps> = ({
     setLoading(true);
   };
 
-  console.log(data?.vehicle.facetCounts);
-
   return (
     <div className={classes.root}>
       <h2>Каталог ({data?.total})</h2>
       <SimpleBar style={{ maxHeight: 400 }}>
-      {data?.vehicle &&
-        Object.values(data?.vehicle.facetCounts).map(
-          (item: IFacetCount, index: number) => (
-            <Button
-              key={index}
-              className='filter_item'
-              value={item.uri}
-              onClick={() => changeFilter(`filter[VEHT]`, item.query)}
-            >
-              {VEHICLE_TYPES[item.uri]}
-            </Button>
-          )
-        )}
-                  </SimpleBar>
+        {data?.vehicle &&
+          Object.values(data?.vehicle.facetCounts).map(
+            (item: IFacetCount, index: number) => (
+              <Button
+                key={index}
+                className='filter_item'
+                value={item.uri}
+                onClick={() => changeFilter(`filter[VEHT]`, item.query)}
+              >
+                {VEHICLE_TYPES[item.uri]}
+              </Button>
+            )
+          )}
+      </SimpleBar>
       <h2>Фильтр</h2>
       <SimpleBar style={{ maxHeight: '100vh' }}>
         <Collapse defaultActiveKey={['0']}>
