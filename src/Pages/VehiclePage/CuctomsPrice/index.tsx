@@ -1,10 +1,15 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Form, Input, Button, Select } from 'antd';
 import { DollarOutlined } from '@ant-design/icons';
 
 import { getCurrencyData } from '../../../API/currency';
 
 import useStyles from './style';
+
+interface ICurrency {
+  ccy: string;
+  buy: number;
+}
 
 interface ICustomsPrice {
   data: IVehicleData[] | undefined;
@@ -24,16 +29,17 @@ const CustomsPrice: FC<ICustomsPrice> = () => {
   const classes = useStyles();
   const [form] = Form.useForm();
 
+  const [currency, setCurrenccy] = useState<ICurrency[]>();
+
   const onFinish = (values: any) => {
     console.log(values);
   };
 
   useEffect(() => {
-    getCurrencyData(5)
-    .then( res => {
-      console.log(res);
-    })
-  }, [])
+    getCurrencyData(5).then((res) => {
+      setCurrenccy(res.data)
+    });
+  }, []);
 
   return (
     <div className={classes.root}>
