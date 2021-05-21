@@ -1,19 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { Carousel } from 'antd';
 import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
-import SimpleBar from 'simplebar-react';
-import 'simplebar/dist/simplebar.min.css';
 
 import { getDataById } from '../../API/catalog';
+import Charateristic from './Characteristic';
+import Carousel from './Carusel';
 
 import useStyles from './style';
-
-interface IVehicleData {
-  key: string;
-  value: string | number;
-}
 
 interface IVehicle {
   title: string;
@@ -59,7 +53,6 @@ const VehiclePage = () => {
 
     getDataById(pathName[pathName.length - 1]).then((res) => {
       const filledData = fillingData(res.data[0].data.lotDetails);
-      console.log(filledData);
 
       setData({
         title: res.data[0].data.lotDetails.ld,
@@ -75,25 +68,9 @@ const VehiclePage = () => {
       <div className={classes.root}>
         <h2>{data?.title}</h2>
         <div className='vehicle_inner'>
-          <div className='image_carusel-wrapper'>
-            <Carousel autoplay className='image_carusel'>
-              {data?.imageList?.map((item: IImageListItem, index: number) => (
-                <div key={index} className='image_block'>
-                  <img src={item.url} alt='' />
-                </div>
-              ))}
-            </Carousel>
-          </div>
-          <div className='vehicle_charateristic'>
-            <SimpleBar style={{ maxHeight: 400 }}>
-              {data?.vehicleData?.map((item: IVehicleData, index: number) => (
-                <div key={index} className='charateristic_item'>
-                  <p className='charateristic_item-key'>{item.key}</p>
-                  <p className='charateristic_item-value'>{item.value}</p>
-                </div>
-              ))}
-            </SimpleBar>
-          </div>
+          <Carousel data={data?.imageList} />
+          <Charateristic data={data?.vehicleData} />
+          <div className='vehicle_charateristic'></div>
         </div>
       </div>
     </Spin>

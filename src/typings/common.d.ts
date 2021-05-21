@@ -104,3 +104,8 @@ declare interface IContent {
   ltnte: string;
   imageList: IImageListItem[];
 }
+
+declare interface IVehicleData {
+  key: string;
+  value: string | number;
+}
