@@ -3,9 +3,13 @@ import { createUseStyles } from 'react-jss';
 const useStyles = createUseStyles({
   root: {
     margin: '0 20px',
-    padding: '10px',
+    padding: '10px 20px',
     width: '100%',
     backgroundColor: '#FFF',
+
+    '& .simplebar-track simplebar-vertical': {
+      right: '-12px',
+    },
 
     '& .charateristic_item': {
       display: 'flex',

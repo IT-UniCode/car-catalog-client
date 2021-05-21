@@ -5,7 +5,8 @@ import { LoadingOutlined } from '@ant-design/icons';
 
 import { getDataById } from '../../API/catalog';
 import Charateristic from './Characteristic';
-import Carousel from './Carusel';
+import Carousel from './Carousel';
+import CuctomsPrice from './CuctomsPrice';
 
 import useStyles from './style';
 
@@ -64,16 +65,18 @@ const VehiclePage = () => {
   }, [history.location.pathname]);
 
   return (
-    <Spin spinning={loading} size='large' indicator={spinIcon}>
-      <div className={classes.root}>
+    <div className={classes.root}>
+      <Spin spinning={loading} size='large' indicator={spinIcon}>
         <h2>{data?.title}</h2>
-        <div className='vehicle_inner'>
-          <Carousel data={data?.imageList} />
-          <Charateristic data={data?.vehicleData} />
-          <div className='vehicle_charateristic'></div>
+        <div className='vehicle_wrapper'>
+          <div className='vehicle_inner'>
+            <Carousel data={data?.imageList} />
+            <Charateristic data={data?.vehicleData} />
+          </div>
+          <CuctomsPrice data={data?.vehicleData} />
         </div>
-      </div>
-    </Spin>
+      </Spin>
+    </div>
   );
 };
 

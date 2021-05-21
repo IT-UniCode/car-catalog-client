@@ -1,4 +1,4 @@
-import api from './config';
+import {api} from './config';
 
 export const getData = (body: any) => api.post(`/copartfilters`, {
   ...body,

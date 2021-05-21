@@ -7,7 +7,7 @@ interface IImageCarusel {
   data: IImageListItem[] | undefined;
 }
 
-const ImageCarusel: FC<IImageCarusel> = ({ data }) => {
+const ImageCarousel: FC<IImageCarusel> = ({ data }) => {
   const classes = useStyles();
 
   return (
@@ -23,4 +23,4 @@ const ImageCarusel: FC<IImageCarusel> = ({ data }) => {
   );
 };
 
-export default ImageCarusel;
+export default ImageCarousel;
