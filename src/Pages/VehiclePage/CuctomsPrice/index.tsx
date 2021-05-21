@@ -8,14 +8,28 @@ import useStyles from './style';
 
 interface ICurrency {
   ccy: string;
-  buy: number;
+  base_ccy: string;
+  buy: string;
+  sale: string;
+}
+
+interface ICurrencyData {
+  [key: string]: ICurrency;
 }
 
 interface ICustomsPrice {
   data: IVehicleData[] | undefined;
 }
 
+interface ICalcCustomsPrice {
+  capacity: string;
+  price: string;
+  fuel: string;
+  year: string;
+}
+
 const { Option } = Select;
+
 const layout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 16 },
@@ -29,23 +43,68 @@ const CustomsPrice: FC<ICustomsPrice> = () => {
   const classes = useStyles();
   const [form] = Form.useForm();
 
-  const [currency, setCurrenccy] = useState<ICurrency[]>();
+  const [currency, setCurrenccy] = useState<ICurrencyData>();
 
-  const onFinish = (values: any) => {
-    console.log(values);
+  const calcPrice = async (values: ICalcCustomsPrice) => {
+    let rate: number = 0;
+
+    if (values.fuel === 'Бензин') {
+      if (Number(values.capacity) < 3) {
+        rate = (50 * Number(currency?.EUR.buy)) / Number(currency?.USD.buy);
+      } else if (Number(values.capacity) > 3) {
+        rate = (100 * Number(currency?.EUR.buy)) / Number(currency?.USD.buy);
+      }
+    } else if (values.fuel === 'Дизель') {
+      if (Number(values.capacity) < 3.5) {
+        rate = (75 * Number(currency?.EUR.buy)) / Number(currency?.USD.buy);
+      } else if (Number(values.capacity) > 3.5) {
+        rate = (150 * Number(currency?.EUR.buy)) / Number(currency?.USD.buy);
+      }
+    }
+
+    console.log('rate', rate);
+    
+    const customs: number = Number(values.price) * 0.1;
+
+    const excise: number = rate * Number(values.capacity) * Number(values.year) * Number(values.capacity);
+
+    const tax: number = (Number(values.price) + customs + excise) * 0.2;
+
+    let pension_fund: number = 0;
+    if (Number(values.price) < 374550) {
+      pension_fund = Number(values.price) * 0.3;
+    } else if (Number(values.price) > 374550 && Number(values.price) < 658300) {
+      pension_fund = Number(values.price) * 0.4;
+    } else if (Number(values.price) > 658300) {
+      pension_fund = Number(values.price) * 0.5;
+    }
+
+    console.log('Мито', customs);
+    console.log('Акциз', excise);
+    console.log('ПДВ', tax);
+    console.log('Пенсійний фонд', pension_fund);
+    
   };
 
   useEffect(() => {
-    getCurrencyData(5).then((res) => {
-      setCurrenccy(res.data)
+    getCurrencyData(11).then((res) => {
+      let parsedResData: ICurrencyData = {};
+
+      res.data.forEach((item: ICurrency) => {
+        parsedResData[item.ccy] = item;
+      });
+
+      setCurrenccy(parsedResData);
     });
   }, []);
+
+  console.log(currency);
 
   return (
     <div className={classes.root}>
       <h2>Стоимость растаможки авто</h2>
 
-      <Form {...layout} form={form} name='control-hooks' onFinish={onFinish}>
+      <Form {...layout} form={form} name='customs-price' onFinish={calcPrice}>
         <Form.Item
           name='price'
           label='Стоимость авто'
@@ -58,12 +117,12 @@ const CustomsPrice: FC<ICustomsPrice> = () => {
           />
         </Form.Item>
         <Form.Item
-          name='volume'
+          name='capacity'
           label='Объем двигателя, куб.см'
           rules={[{ required: true }]}
         >
           <Select allowClear>
-            <Option value='volume'>1.0</Option>
+            <Option value='capacity'>1.0</Option>
           </Select>
         </Form.Item>
         <Form.Item name='fuel' label='Тип топлива' rules={[{ required: true }]}>
