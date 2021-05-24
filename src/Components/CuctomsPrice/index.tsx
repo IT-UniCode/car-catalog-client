@@ -33,7 +33,8 @@ const CustomsPrice: FC<ICustomsPriceProps> = ({ data }) => {
 
   const [currency, setCurrenccy] = useState<ICurrencyData>();
   const [customsResult, setCustomsResult] = useState<ICustomsResult>();
-  const [showResut, setShowResult ] = useState<boolean>(false);
+  const [checkInsurance, setCheckInsurance] = useState<boolean>(false);
+  const [showResut, setShowResult] = useState<boolean>(false);
 
   const convertUAHToUSD = (total: number) => {
     return total / Number(currency!.USD.buy);
@@ -65,7 +66,7 @@ const CustomsPrice: FC<ICustomsPriceProps> = ({ data }) => {
     }
   };
 
-  const calcPrice = async (values: ICalcCustomsPrice) => {
+  const calcPrice = (values: ICalcCustomsPrice) => {
     const pension_coeff: number = findPensionCoeff(Number(values.price));
     const rate: number = calcRate(values.fuel, Number(values.fuel));
     const customs: number = Number(values.price) * 0.1;
@@ -74,6 +75,7 @@ const CustomsPrice: FC<ICustomsPriceProps> = ({ data }) => {
     const pension_fund: number = Number(values.price) * pension_coeff;
 
     setCustomsResult({
+      insurance: checkInsurance,
       vehicleCost: Number(values.price),
       customsPrice: customs,
       excise: excise,
@@ -99,7 +101,12 @@ const CustomsPrice: FC<ICustomsPriceProps> = ({ data }) => {
   return (
     <div className={classes.root}>
       <h2>Стоимость растаможки авто</h2>
-      <CalcForm calcPrice={calcPrice} vehicleData={data}/>
+      <CalcForm
+        calcPrice={calcPrice}
+        vehicleData={data}
+        checkInsurance={checkInsurance}
+        setCheckInsurance={setCheckInsurance}
+      />
       {showResut && <CalculationResult data={customsResult} />}
     </div>
   );

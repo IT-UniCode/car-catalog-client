@@ -8,9 +8,25 @@ const useStyles = createUseStyles({
     '& .result-table': {
       width: '100%',
       fontSize: '18px',
+      marginBottom: '20px',
+      
+      '& tbody': {
+        '& tr:nth-child(2n)': {
+          backgroundColor: '#a1d2ff',
+        },
+      },
+
+      '& tfoot': {
+        fontSize: '16px',
+        fontWeight: '500',
+      },
 
       '& td, th': {
         padding: '5px 10px',
+
+        '&:nth-child(2)': {
+          width: '100%',
+        },
       },
 
       '& .first-row': {
@@ -21,6 +37,10 @@ const useStyles = createUseStyles({
       '& .title-row': {
         textAlign: 'center',
         fontSize: '24px',
+        fontWeight: '500',
+      },
+      '& .conclusion_row': {
+        fontWeight: '700',
       },
     },
   },

@@ -1,11 +1,13 @@
-import React, { FC, useEffect } from 'react';
-import { Form, Input, Button, Select } from 'antd';
+import React, { FC, useEffect, useState } from 'react';
+import { Form, Input, Button, Select, Checkbox } from 'antd';
 import { DollarOutlined } from '@ant-design/icons';
 
 import useStyles from './style';
 
 interface ICalcFormProps {
   calcPrice: (values: any) => void;
+  checkInsurance: boolean;
+  setCheckInsurance: React.Dispatch<React.SetStateAction<boolean>>;
   vehicleData: any;
 }
 
@@ -20,10 +22,9 @@ const tailLayout = {
   wrapperCol: { offset: 8, span: 16 },
 };
 
-const CalcForm: FC<ICalcFormProps> = ({ calcPrice, vehicleData }) => {
+const CalcForm: FC<ICalcFormProps> = ({ calcPrice, vehicleData, checkInsurance, setCheckInsurance }) => {
   const classes = useStyles();
   const [form] = Form.useForm();
-  console.log(vehicleData);
 
   useEffect(() => {}, []);
   return (
@@ -39,6 +40,13 @@ const CalcForm: FC<ICalcFormProps> = ({ calcPrice, vehicleData }) => {
             prefix={<DollarOutlined className='site-form-item-icon' />}
             suffix='USD'
           />
+        </Form.Item>
+        <Form.Item name='insurance' label='Застраховать авто'>
+          <Checkbox
+            checked={checkInsurance}
+            onChange={() => setCheckInsurance((prev) => !prev)}
+          />
+          <span> (3% от стоимости авто, но не менее 150 $)</span>
         </Form.Item>
         <Form.Item
           name='capacity'
