@@ -55,7 +55,8 @@ const Catalog: FC = () => {
   useEffect(() => {
     getData(Object.assign(pageData, filters)).then((res) => {
       const filledData = fillingData(res.data.data.results.facetFields);
-
+      console.log(res.data);
+      
       setData({
         content: res.data.data.results.content,
         total: res.data.data.results.totalElements,

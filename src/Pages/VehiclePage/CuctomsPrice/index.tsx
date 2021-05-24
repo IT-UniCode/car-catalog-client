@@ -22,8 +22,8 @@ interface ICustomsPrice {
 }
 
 interface ICalcCustomsPrice {
-  capacity: string;
-  price: string;
+  capacity: number;
+  price: number;
   fuel: string;
   year: string;
 }
@@ -45,45 +45,43 @@ const CustomsPrice: FC<ICustomsPrice> = () => {
 
   const [currency, setCurrenccy] = useState<ICurrencyData>();
 
+  const convertUAHToUSD = (total: number) => {
+    return total / Number(currency!.USD.buy);
+  };
+
+  const findPensionCoeff = (cost: number) => {
+    if (cost < convertUAHToUSD(374550)) {
+      return 0.03;
+    } else if (cost > convertUAHToUSD(658300)) {
+      return 0.05;
+    } else {
+      return 0.04;
+    }
+  };
+
+  const calcRate = (fuelType: string, engineCapacity: number) => {
+    if (fuelType === 'gas') {
+      if (engineCapacity < 3) {
+        return (50 * Number(currency?.EUR.buy)) / Number(currency?.USD.buy);
+      } else {
+        return (100 * Number(currency?.EUR.buy)) / Number(currency?.USD.buy);
+      }
+    } else {
+      if (engineCapacity < 3.5) {
+        return (75 * Number(currency?.EUR.buy)) / Number(currency?.USD.buy);
+      } else {
+        return (150 * Number(currency?.EUR.buy)) / Number(currency?.USD.buy);
+      }
+    }
+  };
+
   const calcPrice = async (values: ICalcCustomsPrice) => {
-    let rate: number = 0;
-
-    if (values.fuel === 'Бензин') {
-      if (Number(values.capacity) < 3) {
-        rate = (50 * Number(currency?.EUR.buy)) / Number(currency?.USD.buy);
-      } else if (Number(values.capacity) > 3) {
-        rate = (100 * Number(currency?.EUR.buy)) / Number(currency?.USD.buy);
-      }
-    } else if (values.fuel === 'Дизель') {
-      if (Number(values.capacity) < 3.5) {
-        rate = (75 * Number(currency?.EUR.buy)) / Number(currency?.USD.buy);
-      } else if (Number(values.capacity) > 3.5) {
-        rate = (150 * Number(currency?.EUR.buy)) / Number(currency?.USD.buy);
-      }
-    }
-
-    console.log('rate', rate);
-    
+    const pension_coeff: number = findPensionCoeff(Number(values.price));
+    const rate: number = calcRate(values.fuel, Number(values.fuel));
     const customs: number = Number(values.price) * 0.1;
-
-    const excise: number = rate * Number(values.capacity) * Number(values.year) * Number(values.capacity);
-
+    const excise: number = rate * values.capacity * Number(values.year);
     const tax: number = (Number(values.price) + customs + excise) * 0.2;
-
-    let pension_fund: number = 0;
-    if (Number(values.price) < 374550) {
-      pension_fund = Number(values.price) * 0.3;
-    } else if (Number(values.price) > 374550 && Number(values.price) < 658300) {
-      pension_fund = Number(values.price) * 0.4;
-    } else if (Number(values.price) > 658300) {
-      pension_fund = Number(values.price) * 0.5;
-    }
-
-    console.log('Мито', customs);
-    console.log('Акциз', excise);
-    console.log('ПДВ', tax);
-    console.log('Пенсійний фонд', pension_fund);
-    
+    const pension_fund: number = Number(values.price) * pension_coeff;
   };
 
   useEffect(() => {
@@ -98,8 +96,6 @@ const CustomsPrice: FC<ICustomsPrice> = () => {
     });
   }, []);
 
-  console.log(currency);
-
   return (
     <div className={classes.root}>
       <h2>Стоимость растаможки авто</h2>
@@ -108,10 +104,9 @@ const CustomsPrice: FC<ICustomsPrice> = () => {
         <Form.Item
           name='price'
           label='Стоимость авто'
-          rules={[{ required: true }]}
+          rules={[{ required: true, pattern: /^[0-9]*[.,]?[0-9]+$/ }]}
         >
           <Input
-            type='number'
             prefix={<DollarOutlined className='site-form-item-icon' />}
             suffix='USD'
           />
@@ -122,7 +117,7 @@ const CustomsPrice: FC<ICustomsPrice> = () => {
           rules={[{ required: true }]}
         >
           <Select allowClear>
-            <Option value='capacity'>1.0</Option>
+            <Option value={1}>1.0</Option>
           </Select>
         </Form.Item>
         <Form.Item name='fuel' label='Тип топлива' rules={[{ required: true }]}>
