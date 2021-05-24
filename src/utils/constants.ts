@@ -15,3 +15,15 @@ export const VEHICLE_TYPES: IVEHT = {
   trailers: 'Прицепы',
   recreationalveh: 'Дом на колесах',
 };
+
+export const GAS_TYPES = [
+  'GAS',
+  'FLEXIBLE FUEL',
+  'COMPRESSED NATURAL GAS',
+  'CONVERTIBLE TO GASEOUS POWERED',
+  'HYDROGEN FUEL CELL',
+  'PROPANE GAS',
+  'HYBRID ENGINE',
+];
+
+export const DIESEL_TYPES = ['ELECTRIC AND DIESEL HYBRID', 'DIESEL'];

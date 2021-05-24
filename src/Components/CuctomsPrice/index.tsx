@@ -3,6 +3,7 @@ import React, { FC, useEffect, useState } from 'react';
 import CalcForm from './CalcForm';
 import CalculationResult from './CalculationResult';
 import { getCurrencyData } from '../../API/currency';
+import { getData } from '../../API/catalog';
 
 import useStyles from './style';
 
@@ -22,6 +23,7 @@ interface ICurrencyData {
 }
 
 interface ICalcCustomsPrice {
+  location: string;
   capacity: number;
   price: number;
   fuel: string;
@@ -33,6 +35,7 @@ const CustomsPrice: FC<ICustomsPriceProps> = ({ data }) => {
 
   const [currency, setCurrenccy] = useState<ICurrencyData>();
   const [customsResult, setCustomsResult] = useState<ICustomsResult>();
+  const [locations, setLocations] = useState<string[]>();
   const [checkInsurance, setCheckInsurance] = useState<boolean>(false);
   const [showResut, setShowResult] = useState<boolean>(false);
 
@@ -67,11 +70,23 @@ const CustomsPrice: FC<ICustomsPriceProps> = ({ data }) => {
   };
 
   const calcPrice = (values: ICalcCustomsPrice) => {
-    const pension_coeff: number = findPensionCoeff(Number(values.price));
-    const rate: number = calcRate(values.fuel, Number(values.fuel));
-    const customs: number = Number(values.price) * 0.1;
+    const pension_coeff: number =
+      values.fuel === 'ELECTRIC' ? 1 : findPensionCoeff(Number(values.price));
+
+    const rate: number =
+      values.fuel === 'ELECTRIC'
+        ? 1
+        : calcRate(values.fuel, Number(values.fuel));
+
+    const customs: number =
+      Number(values.price) * (values.fuel === 'ELECTRIC' ? 1 : 0.1);
+
     const excise: number = rate * values.capacity * Number(values.year);
-    const tax: number = (Number(values.price) + customs + excise) * 0.2;
+
+    const tax: number =
+      (Number(values.price) + customs + excise) *
+      (values.fuel === 'ELECTRIC' ? 1 : 0.2);
+
     const pension_fund: number = Number(values.price) * pension_coeff;
 
     setCustomsResult({
@@ -96,6 +111,15 @@ const CustomsPrice: FC<ICustomsPriceProps> = ({ data }) => {
 
       setCurrenccy(parsedResData);
     });
+
+    getData({ page: 0 }).then((res) => {
+      let result: string[] = [];
+      res.data.data.results.facetFields[7].facetCounts.forEach((item: any) => {
+        result.push(item.displayName.toUpperCase());
+      });
+
+      setLocations(result);
+    });
   }, []);
 
   return (
@@ -106,6 +130,7 @@ const CustomsPrice: FC<ICustomsPriceProps> = ({ data }) => {
         vehicleData={data}
         checkInsurance={checkInsurance}
         setCheckInsurance={setCheckInsurance}
+        locations={locations}
       />
       {showResut && <CalculationResult data={customsResult} />}
     </div>

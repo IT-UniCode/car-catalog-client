@@ -1,6 +1,8 @@
-import React, { FC, useEffect, useState } from 'react';
-import { Form, Input, Button, Select, Checkbox } from 'antd';
+import React, { FC, useEffect } from 'react';
+import { Form, Input, Button, Select, Checkbox, InputNumber } from 'antd';
 import { DollarOutlined } from '@ant-design/icons';
+
+import { DIESEL_TYPES, GAS_TYPES } from '../../../utils/constants';
 
 import useStyles from './style';
 
@@ -8,6 +10,7 @@ interface ICalcFormProps {
   calcPrice: (values: any) => void;
   checkInsurance: boolean;
   setCheckInsurance: React.Dispatch<React.SetStateAction<boolean>>;
+  locations: string[] | undefined;
   vehicleData: any;
 }
 
@@ -22,11 +25,29 @@ const tailLayout = {
   wrapperCol: { offset: 8, span: 16 },
 };
 
-const CalcForm: FC<ICalcFormProps> = ({ calcPrice, vehicleData, checkInsurance, setCheckInsurance }) => {
+const CalcForm: FC<ICalcFormProps> = ({
+  calcPrice,
+  vehicleData,
+  checkInsurance,
+  setCheckInsurance,
+  locations,
+}) => {
   const classes = useStyles();
   const [form] = Form.useForm();
 
+  const checkFuelType = (fuelType: string) => {
+    if (GAS_TYPES.includes(fuelType)) {
+      return 'GAS';
+    }
+    if (DIESEL_TYPES.includes(fuelType)) {
+      return 'DIESEL';
+    }
+
+    return 'ELECTRIC';
+  };
+
   useEffect(() => {}, []);
+
   return (
     <div className={classes.root}>
       <Form {...layout} form={form} name='customs-price' onFinish={calcPrice}>
@@ -41,7 +62,7 @@ const CalcForm: FC<ICalcFormProps> = ({ calcPrice, vehicleData, checkInsurance, 
             suffix='USD'
           />
         </Form.Item>
-        <Form.Item name='insurance' label='Застраховать авто'>
+        <Form.Item label='Застраховать авто'>
           <Checkbox
             checked={checkInsurance}
             onChange={() => setCheckInsurance((prev) => !prev)}
@@ -61,38 +82,35 @@ const CalcForm: FC<ICalcFormProps> = ({ calcPrice, vehicleData, checkInsurance, 
         <Form.Item
           name='fuel'
           label='Тип топлива'
-          initialValue={vehicleData.ft}
+          initialValue={checkFuelType(vehicleData.ft)}
           rules={[{ required: true }]}
         >
           <Select allowClear>
             <Option value='GAS'>Бензин</Option>
             <Option value='DIESEL'>Дизель</Option>
+            <Option value='ELECTRIC'>Електро</Option>
           </Select>
         </Form.Item>
         <Form.Item
           name='year'
           label='Возраст автомобиля'
           initialValue={new Date().getFullYear() - vehicleData?.lcy}
+          rules={[{ required: true, pattern: /^[0-9]{0,3}$/ }]}
+        >
+          <InputNumber />
+        </Form.Item>
+        <Form.Item
+          name='location'
+          label='Выберите площадку аукциона'
+          initialValue={vehicleData?.syn}
           rules={[{ required: true }]}
         >
           <Select allowClear>
-            <Option value='0'>1 и меньше</Option>
-            <Option value='1'>1</Option>
-            <Option value='2'>2</Option>
-            <Option value='3'>3</Option>
-            <Option value='4'>4</Option>
-            <Option value='5'>5</Option>
-            <Option value='6'>6</Option>
-            <Option value='7'>7</Option>
-            <Option value='8'>8</Option>
-            <Option value='9'>9</Option>
-            <Option value='10'>10</Option>
-            <Option value='11'>11</Option>
-            <Option value='12'>12</Option>
-            <Option value='13'>13</Option>
-            <Option value='14'>14</Option>
-            <Option value='15'>15</Option>
-            <Option value='15-and-more'>15 и больше</Option>
+            {locations?.map((item: string, index: number) => (
+              <Option value={item} key={index}>
+                {item}
+              </Option>
+            ))}
           </Select>
         </Form.Item>
         <Form.Item {...tailLayout}>

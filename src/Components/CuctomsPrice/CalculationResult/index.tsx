@@ -65,8 +65,6 @@ const CalculationResult: FC<ICalculationResultProps> = ({ data }) => {
     0
   );
 
-  console.log(data);
-
   return (
     <div className={classes.root}>
       <table className='result-table'>
