@@ -109,3 +109,11 @@ declare interface IVehicleData {
   key: string;
   value: string | number;
 }
+
+declare interface ICustomsResult {
+  vehicleCost: number;
+  customsPrice: number;
+  excise: number;
+  tax: number;
+  pension_fund: number;
+}

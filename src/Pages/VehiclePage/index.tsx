@@ -6,7 +6,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { getDataById } from '../../API/catalog';
 import Charateristic from './Characteristic';
 import Carousel from './Carousel';
-import CuctomsPrice from './CuctomsPrice';
+import CuctomsPrice from '../../Components/CuctomsPrice';
 
 import useStyles from './style';
 
@@ -22,6 +22,7 @@ const VehiclePage = () => {
   const classes = useStyles();
   const history = useHistory();
   const [data, setData] = useState<IVehicle | undefined>();
+  const [responeData, setResponeData] = useState();
   const [loading, setLoading] = useState(true);
 
   const fillingData = (array: IContent) => {
@@ -55,6 +56,7 @@ const VehiclePage = () => {
     getDataById(pathName[pathName.length - 1]).then((res) => {
       const filledData = fillingData(res.data[0].data.lotDetails);
 
+      setResponeData(res.data[0].data.lotDetails);
       setData({
         title: res.data[0].data.lotDetails.ld,
         vehicleData: filledData,
@@ -73,7 +75,7 @@ const VehiclePage = () => {
             <Carousel data={data?.imageList} />
             <Charateristic data={data?.vehicleData} />
           </div>
-          <CuctomsPrice data={data?.vehicleData} />
+          {!loading && <CuctomsPrice data={responeData} />}
         </div>
       </Spin>
     </div>
