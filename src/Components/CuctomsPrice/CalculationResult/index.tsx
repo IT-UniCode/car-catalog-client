@@ -32,8 +32,8 @@ const CalculationResult: FC<ICalculationResultProps> = ({ data }) => {
       cost: 1000,
     },
     {
-      title: 'Доставка с аукциона в выбранный Вами порт погрузки*',
-      cost: 0,
+      title: `Доставка с аукциона в порт ${data!.port} погрузки*`,
+      cost: data!.deliveryToPort,
     },
     {
       title: 'Погрузка в контейнер',
@@ -44,8 +44,8 @@ const CalculationResult: FC<ICalculationResultProps> = ({ data }) => {
       cost: 50,
     },
     {
-      title: 'Доставка кораблем в порт выгрузки',
-      cost: 0,
+      title: 'Доставка кораблем в Одессу',
+      cost:  data!.deliveryToOdessa,
     },
   ];
 

@@ -118,8 +118,7 @@ declare interface ICustomsResult {
   excise: number;
   tax: number;
   pension_fund: number;
-  deliveryToOdessa: string;
-  deliveryToPort: string;
-  deliveryTotalPrice: string;
+  deliveryToOdessa: number;
+  deliveryToPort: number;
   port: string;
 }

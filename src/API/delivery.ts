@@ -1,3 +1,8 @@
-import { deliveryApi } from './config';
+import { deliveryCostApi, deliveryPortApi } from './config';
 
-export const getDeliveryData = (city: string, state: string) => deliveryApi.get(`/delivery?auction=copart&city=${city}&state=${state}`);
+export const getDeliveryCostData = (city: string, state: string) =>
+  deliveryCostApi.get(`/delivery?auction=copart&city=${city}&state=${state}`);
+
+export const getDeliveryPortData = (location: string) =>
+  deliveryPortApi.get(`delivery?auction=copart&destination=odessa&location=${location}&type=small
+`);

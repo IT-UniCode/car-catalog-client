@@ -4,7 +4,7 @@ import CalcForm from './CalcForm';
 import CalculationResult from './CalculationResult';
 import { getCurrencyData } from '../../API/currency';
 import { getData } from '../../API/catalog';
-import { getDeliveryData } from '../../API/delivery';
+import { getDeliveryCostData, getDeliveryPortData } from '../../API/delivery';
 import { FuelType } from '../../utils/enums';
 
 import useStyles from './style';
@@ -115,23 +115,25 @@ const CustomsPrice: FC<ICustomsPriceProps> = ({ data }) => {
     const pension_fund: number = values.price * pension_coeff;
 
     const location = values.location.split('-');
-    
-    getDeliveryData(location[0].trim(), location[1].trim()).then((res) => {
-      setCustomsResult({
-        deliveryToOdessa: res.data.deliveryToOdessa,
-        deliveryToPort: res.data.deliveryToPort,
-        deliveryTotalPrice: res.data.deliveryTotalPrice,
-        port: res.data.port,
-        firstRegistration: Math.round(convertUAHToUSD(760)),
-        insurance: checkInsurance,
-        vehicleCost: values.price,
-        customsPrice: Math.round(customs),
-        excise: Math.round(excise),
-        tax: Math.round(tax),
-        pension_fund: Math.round(pension_fund),
-      });
-    });
 
+    getDeliveryCostData(location[0].trim(), location[1].trim()).then(
+      (costRes: any) => {
+        getDeliveryPortData(values.location).then((portRes: any) => {
+          setCustomsResult({
+            deliveryToOdessa: Math.round(costRes.data.deliveryToOdessa),
+            deliveryToPort: Math.round(costRes.data.deliveryToPort),
+            port: portRes.data.port,
+            firstRegistration: Math.round(convertUAHToUSD(760)),
+            insurance: checkInsurance,
+            vehicleCost: values.price,
+            customsPrice: Math.round(customs),
+            excise: Math.round(excise),
+            tax: Math.round(tax),
+            pension_fund: Math.round(pension_fund),
+          });
+        });
+      }
+    );
 
     setShowResult(true);
   };
