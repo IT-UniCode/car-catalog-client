@@ -34,11 +34,12 @@ const useStyles = createUseStyles({
         },
       },
     },
+    '& .card_btn': {
+      backgroundColor: '#1890ff',
+      color: '#FFF'
+    },
   },
 
-  '& .card_btn': {
-    margin: 'auto 10px',
-  },
 });
 
 export default useStyles;

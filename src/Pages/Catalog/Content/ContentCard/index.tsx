@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Button } from 'antd';
 
 import useStyles from './style';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 interface ICardProps {
   data: IContent;
@@ -10,9 +10,10 @@ interface ICardProps {
 
 const Card: FC<ICardProps> = ({ data }) => {
   const classes = useStyles();
+  const history = useHistory();
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} onClick={() => history.push(`catalog/${data.ln}`)}>
       <img className='card_img' src={data.tims} alt='' />
       <div className='card_content'>
         <h4>{data.ld}</h4>
