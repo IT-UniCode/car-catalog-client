@@ -29,7 +29,7 @@ const useStyles = createUseStyles({
         },
       },
 
-      '& .first-row': {
+      '& .first-row, .title-row>td': {
         backgroundColor: '#1890ff',
         color: '#FFF',
       },
@@ -38,6 +38,7 @@ const useStyles = createUseStyles({
         textAlign: 'center',
         fontSize: '24px',
         fontWeight: '500',
+
       },
       '& .conclusion_row': {
         fontWeight: '700',

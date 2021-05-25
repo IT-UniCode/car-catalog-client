@@ -6,10 +6,15 @@ interface ICalculationResultProps {
   data: ICustomsResult | undefined;
 }
 
+interface ICosts {
+  title: string;
+  cost: number;
+}
+
 const CalculationResult: FC<ICalculationResultProps> = ({ data }) => {
   const classes = useStyles();
 
-  const costsInUSA = [
+  const costsInUSA: ICosts[] = [
     {
       title: 'Стоимость вашего авто на аукционе в США',
       cost: data!.vehicleCost,
@@ -44,7 +49,7 @@ const CalculationResult: FC<ICalculationResultProps> = ({ data }) => {
     },
   ];
 
-  const costsAtTheDestinationPort = [
+  const costsAtTheDestinationPort: ICosts[] = [
     {
       title: 'Экспедирование',
       cost: 400,
@@ -59,7 +64,7 @@ const CalculationResult: FC<ICalculationResultProps> = ({ data }) => {
     },
   ];
 
-  const costsAtTheCustoms = [
+  const costsAtTheCustoms: ICosts[] = [
     {
       title: 'Пошлина',
       cost: data!.customsPrice,
@@ -74,7 +79,7 @@ const CalculationResult: FC<ICalculationResultProps> = ({ data }) => {
     },
   ];
 
-  const anotherCosts = [
+  const anotherCosts: ICosts[] = [
     {
       title: 'Пенсионный фонд',
       cost: data!.pension_fund,
@@ -85,19 +90,14 @@ const CalculationResult: FC<ICalculationResultProps> = ({ data }) => {
     },
   ];
 
-  const sumCostsInUsa = costsInUSA.reduce((sum, item) => item?.cost + sum, 0);
-  const sumСostsAtTheDestinationPort = costsAtTheDestinationPort.reduce(
-    (sum, item) => item?.cost + sum,
-    0
-  );
-  const sumCustomsCosts = costsAtTheCustoms.reduce(
-    (sum, item) => item.cost + sum,
-    0
-  );
-  const sumAnotherCosts = anotherCosts.reduce(
-    (sum, item) => item.cost + sum,
-    0
-  );
+  const getSum = (costs: ICosts[]) => {
+    return costs.reduce((sum, item) => item.cost + sum, 0);
+  };
+
+  const sumCostsInUsa = getSum(costsInUSA);
+  const sumСostsAtTheDestinationPort = getSum(costsAtTheDestinationPort);
+  const sumCustomsCosts = getSum(costsAtTheCustoms);
+  const sumAnotherCosts = getSum(anotherCosts);
 
   return (
     <div className={classes.root}>
