@@ -111,6 +111,7 @@ declare interface IVehicleData {
 }
 
 declare interface ICustomsResult {
+  firstRegistration: number;
   insurance: boolean;
   vehicleCost: number;
   customsPrice: number;

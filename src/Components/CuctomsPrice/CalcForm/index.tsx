@@ -2,7 +2,12 @@ import React, { FC, useEffect } from 'react';
 import { Form, Input, Button, Select, Checkbox, InputNumber } from 'antd';
 import { DollarOutlined } from '@ant-design/icons';
 
-import { DIESEL_TYPES, GAS_TYPES } from '../../../utils/constants';
+import {
+  DIESEL_TYPES,
+  GAS_TYPES,
+  HYBRID_TYPES,
+} from '../../../utils/constants';
+import { FuelType } from '../../../utils/enums';
 
 import useStyles from './style';
 
@@ -37,13 +42,16 @@ const CalcForm: FC<ICalcFormProps> = ({
 
   const checkFuelType = (fuelType: string) => {
     if (GAS_TYPES.includes(fuelType)) {
-      return 'GAS';
+      return FuelType.gas;
     }
     if (DIESEL_TYPES.includes(fuelType)) {
-      return 'DIESEL';
+      return FuelType.diesel;
+    }
+    if (HYBRID_TYPES.includes(fuelType)) {
+      return FuelType.hybrid;
     }
 
-    return 'ELECTRIC';
+    return FuelType.electric;
   };
 
   useEffect(() => {}, []);
@@ -71,10 +79,10 @@ const CalcForm: FC<ICalcFormProps> = ({
         </Form.Item>
         <Form.Item
           name='capacity'
-          label='Объем двигателя, л'
+          label='Объем двигателя, л | кВт'
           initialValue={vehicleData.egn && parseFloat(vehicleData.egn)}
           rules={[
-            { required: true, pattern: /^[0-9]{0,2}([.,]{1}[0-9]{1})?$/ },
+            { required: true, pattern: /^[0-9]{0,4}([.,]{1}[0-9]{1})?$/ },
           ]}
         >
           <Input />
@@ -86,9 +94,10 @@ const CalcForm: FC<ICalcFormProps> = ({
           rules={[{ required: true }]}
         >
           <Select allowClear>
-            <Option value='GAS'>Бензин</Option>
-            <Option value='DIESEL'>Дизель</Option>
-            <Option value='ELECTRIC'>Електро</Option>
+            <Option value={FuelType.gas}>Бензин</Option>
+            <Option value={FuelType.diesel}>Дизель</Option>
+            <Option value={FuelType.electric}>Електро</Option>
+            <Option value={FuelType.hybrid}>Гибрид</Option>
           </Select>
         </Form.Item>
         <Form.Item
