@@ -34,7 +34,7 @@ const VehiclePage = () => {
       { key: 'Основные моменты:', value: array.lcd || '-' },
       { key: 'Основное повреждение:', value: array.dd || '-' },
       { key: 'Вторичное повреждение:', value: array.sdd || '-' },
-      { key: 'Оценочная розничная стоимость: ', value: array.la || '-' },
+      { key: 'Оценочная розничная стоимость: ', value: array.la + ' $' || '-' },
       { key: 'Тип кузова:', value: array.bstl || '-' },
       { key: 'Классификация ТС:', value: array.vehTypDesc || '-' },
       { key: 'Цвет:', value: array.clr || '-' },

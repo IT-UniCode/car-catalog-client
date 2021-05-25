@@ -7,9 +7,9 @@ const useStyles = createUseStyles({
     width: '100%',
     backgroundColor: '#FFF',
 
-    '& .simplebar-track simplebar-vertical': {
-      right: '-12px',
-    },
+      '& .simplebar-vertical': {
+        right: '-16px',
+      },
 
     '& .charateristic_item': {
       display: 'flex',
