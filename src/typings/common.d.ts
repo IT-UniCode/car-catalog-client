@@ -104,3 +104,17 @@ declare interface IContent {
   ltnte: string;
   imageList: IImageListItem[];
 }
+
+declare interface IVehicleData {
+  key: string;
+  value: string | number;
+}
+
+declare interface ICustomsResult {
+  insurance: boolean;
+  vehicleCost: number;
+  customsPrice: number;
+  excise: number;
+  tax: number;
+  pension_fund: number;
+}

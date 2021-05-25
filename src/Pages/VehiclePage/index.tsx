@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { Carousel } from 'antd';
 import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
-import SimpleBar from 'simplebar-react';
-import 'simplebar/dist/simplebar.min.css';
 
 import { getDataById } from '../../API/catalog';
+import Charateristic from './Characteristic';
+import Carousel from './Carousel';
+import CuctomsPrice from '../../Components/CuctomsPrice';
 
 import useStyles from './style';
-
-interface IVehicleData {
-  key: string;
-  value: string | number;
-}
 
 interface IVehicle {
   title: string;
@@ -27,6 +22,7 @@ const VehiclePage = () => {
   const classes = useStyles();
   const history = useHistory();
   const [data, setData] = useState<IVehicle | undefined>();
+  const [responeData, setResponeData] = useState();
   const [loading, setLoading] = useState(true);
 
   const fillingData = (array: IContent) => {
@@ -38,7 +34,7 @@ const VehiclePage = () => {
       { key: 'Основные моменты:', value: array.lcd || '-' },
       { key: 'Основное повреждение:', value: array.dd || '-' },
       { key: 'Вторичное повреждение:', value: array.sdd || '-' },
-      { key: 'Оценочная розничная стоимость: ', value: array.la || '-' },
+      { key: 'Оценочная розничная стоимость: ', value: array.la + ' $' || '-' },
       { key: 'Тип кузова:', value: array.bstl || '-' },
       { key: 'Классификация ТС:', value: array.vehTypDesc || '-' },
       { key: 'Цвет:', value: array.clr || '-' },
@@ -59,8 +55,8 @@ const VehiclePage = () => {
 
     getDataById(pathName[pathName.length - 1]).then((res) => {
       const filledData = fillingData(res.data[0].data.lotDetails);
-      console.log(filledData);
 
+      setResponeData(res.data[0].data.lotDetails);
       setData({
         title: res.data[0].data.lotDetails.ld,
         vehicleData: filledData,
@@ -71,32 +67,18 @@ const VehiclePage = () => {
   }, [history.location.pathname]);
 
   return (
-    <Spin spinning={loading} size='large' indicator={spinIcon}>
-      <div className={classes.root}>
+    <div className={classes.root}>
+      <Spin spinning={loading} size='large' indicator={spinIcon}>
         <h2>{data?.title}</h2>
-        <div className='vehicle_inner'>
-          <div className='image_carusel-wrapper'>
-            <Carousel autoplay className='image_carusel'>
-              {data?.imageList?.map((item: IImageListItem, index: number) => (
-                <div key={index} className='image_block'>
-                  <img src={item.url} alt='' />
-                </div>
-              ))}
-            </Carousel>
+        <div className='vehicle_wrapper'>
+          <div className='vehicle_inner'>
+            <Carousel data={data?.imageList} />
+            <Charateristic data={data?.vehicleData} />
           </div>
-          <div className='vehicle_charateristic'>
-            <SimpleBar style={{ maxHeight: 400 }}>
-              {data?.vehicleData?.map((item: IVehicleData, index: number) => (
-                <div key={index} className='charateristic_item'>
-                  <p className='charateristic_item-key'>{item.key}</p>
-                  <p className='charateristic_item-value'>{item.value}</p>
-                </div>
-              ))}
-            </SimpleBar>
-          </div>
+          {!loading && <CuctomsPrice data={responeData} />}
         </div>
-      </div>
-    </Spin>
+      </Spin>
+    </div>
   );
 };
 
