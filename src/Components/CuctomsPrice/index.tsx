@@ -114,12 +114,13 @@ const CustomsPrice: FC<ICustomsPriceProps> = ({ data }) => {
     const pension_fund: number = values.price * pension_coeff;
 
     setCustomsResult({
+      firstRegistration: Math.round(convertUAHToUSD(760)),
       insurance: checkInsurance,
       vehicleCost: values.price,
-      customsPrice: customs,
-      excise: excise,
-      tax: tax,
-      pension_fund: pension_fund,
+      customsPrice: Math.round(customs),
+      excise: Math.round(excise),
+      tax: Math.round(tax),
+      pension_fund: Math.round(pension_fund),
     });
 
     setShowResult(true);

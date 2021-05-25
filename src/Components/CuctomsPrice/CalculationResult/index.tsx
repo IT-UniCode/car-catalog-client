@@ -59,9 +59,43 @@ const CalculationResult: FC<ICalculationResultProps> = ({ data }) => {
     },
   ];
 
+  const costsAtTheCustoms = [
+    {
+      title: 'Пошлина',
+      cost: data!.customsPrice,
+    },
+    {
+      title: 'Акцизный сбор',
+      cost: data!.excise,
+    },
+    {
+      title: 'НДС',
+      cost: data!.tax,
+    },
+  ];
+
+  const anotherCosts = [
+    {
+      title: 'Пенсионный фонд',
+      cost: data!.pension_fund,
+    },
+    {
+      title: 'Расходы на регистрацию',
+      cost: data!.firstRegistration,
+    },
+  ];
+
   const sumCostsInUsa = costsInUSA.reduce((sum, item) => item?.cost + sum, 0);
   const sumСostsAtTheDestinationPort = costsAtTheDestinationPort.reduce(
     (sum, item) => item?.cost + sum,
+    0
+  );
+  const sumCustomsCosts = costsAtTheCustoms.reduce(
+    (sum, item) => item.cost + sum,
+    0
+  );
+  const sumAnotherCosts = anotherCosts.reduce(
+    (sum, item) => item.cost + sum,
     0
   );
 
@@ -90,6 +124,59 @@ const CalculationResult: FC<ICalculationResultProps> = ({ data }) => {
             <td colSpan={2}>Итого</td>
             <td>{sumCostsInUsa} $</td>
           </tr>
+
+          <tr className='title-row'>
+            <td colSpan={3}>Затраты в порту назначения</td>
+          </tr>
+          {costsAtTheDestinationPort.map((item, index) => (
+            <tr key={index}>
+              <td>{index + 1}</td>
+              <td>{item.title}</td>
+              <td>{item.cost} $</td>
+            </tr>
+          ))}
+          <tr className='conclusion_row'>
+            <td colSpan={2}>Итого</td>
+            <td>{sumСostsAtTheDestinationPort} $</td>
+          </tr>
+          <tr className='title-row'>
+            <td colSpan={3}>Затраты на растаможку</td>
+          </tr>
+          {costsAtTheCustoms.map((item, index) => (
+            <tr key={index}>
+              <td>{index + 1}</td>
+              <td>{item.title}</td>
+              <td>{item.cost} $</td>
+            </tr>
+          ))}
+          <tr className='conclusion_row'>
+            <td colSpan={2}>Итого</td>
+            <td>{sumCustomsCosts} $</td>
+          </tr>
+          <tr className='title-row'>
+            <td colSpan={3}>Дополнительный расходы</td>
+          </tr>
+          {anotherCosts.map((item, index) => (
+            <tr key={index}>
+              <td>{index + 1}</td>
+              <td>{item.title}</td>
+              <td>{item.cost} $</td>
+            </tr>
+          ))}
+          <tr className='conclusion_row'>
+            <td colSpan={2}>Итого</td>
+            <td>{sumAnotherCosts} $</td>
+          </tr>
+          <tr className='conclusion_row'>
+            <td colSpan={2}>Всего стоимость авто</td>
+            <td>
+              {sumСostsAtTheDestinationPort +
+                sumCostsInUsa +
+                sumCustomsCosts +
+                sumAnotherCosts}{' '}
+              $
+            </td>
+          </tr>
         </tbody>
         <tfoot>
           <tr>
@@ -107,36 +194,6 @@ const CalculationResult: FC<ICalculationResultProps> = ({ data }) => {
             </td>
           </tr>
         </tfoot>
-      </table>
-
-      <table className='result-table'>
-        <thead>
-          <tr className='first-row'>
-            <th>№</th>
-            <th>Наименование</th>
-            <th>Стоимость</th>
-          </tr>
-          <tr className='title-row'>
-            <td colSpan={3}>Затраты в порту назначения</td>
-          </tr>
-        </thead>
-        <tbody>
-          {costsAtTheDestinationPort.map((item, index) => (
-            <tr key={index}>
-              <td>{index + 1}</td>
-              <td>{item.title}</td>
-              <td>{item.cost} $</td>
-            </tr>
-          ))}
-          <tr className='conclusion_row'>
-            <td colSpan={2}>Итого</td>
-            <td>{sumСostsAtTheDestinationPort} $</td>
-          </tr>
-          <tr className='conclusion_row'>
-            <td colSpan={2}>Всего стоимость авто</td>
-            <td>{sumСostsAtTheDestinationPort + sumCostsInUsa} $</td>
-          </tr>
-        </tbody>
       </table>
     </div>
   );
