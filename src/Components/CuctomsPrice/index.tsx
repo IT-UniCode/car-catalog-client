@@ -4,6 +4,7 @@ import CalcForm from './CalcForm';
 import CalculationResult from './CalculationResult';
 import { getCurrencyData } from '../../API/currency';
 import { getData } from '../../API/catalog';
+import { FuelType } from '../../utils/enums';
 
 import useStyles from './style';
 
@@ -53,45 +54,68 @@ const CustomsPrice: FC<ICustomsPriceProps> = ({ data }) => {
     }
   };
 
-  const calcRate = (fuelType: string, engineCapacity: number) => {
-    if (fuelType === 'GAS') {
+  const calcExcise = (
+    fuelType: string,
+    engineCapacity: number,
+    year: number
+  ) => {
+    if (fuelType === FuelType.hybrid) {
+      return (100 * Number(currency?.EUR.buy)) / Number(currency?.USD.buy);
+    }
+
+    if (fuelType === FuelType.electric) {
+      return (
+        engineCapacity * (Number(currency?.EUR.buy) / Number(currency?.USD.buy))
+      );
+    }
+
+    let rate: number = 0;
+
+    if (fuelType === FuelType.gas) {
       if (engineCapacity < 3) {
-        return (50 * Number(currency?.EUR.buy)) / Number(currency?.USD.buy);
+        rate = (50 * Number(currency?.EUR.buy)) / Number(currency?.USD.buy);
       } else {
-        return (100 * Number(currency?.EUR.buy)) / Number(currency?.USD.buy);
-      }
-    } else {
-      if (engineCapacity < 3.5) {
-        return (75 * Number(currency?.EUR.buy)) / Number(currency?.USD.buy);
-      } else {
-        return (150 * Number(currency?.EUR.buy)) / Number(currency?.USD.buy);
+        rate = (100 * Number(currency?.EUR.buy)) / Number(currency?.USD.buy);
       }
     }
+
+    if (fuelType === FuelType.diesel) {
+      if (engineCapacity < 3.5) {
+        rate = (75 * Number(currency?.EUR.buy)) / Number(currency?.USD.buy);
+      } else {
+        rate = (150 * Number(currency?.EUR.buy)) / Number(currency?.USD.buy);
+      }
+    }
+
+    return rate * year * engineCapacity;
   };
 
   const calcPrice = (values: ICalcCustomsPrice) => {
-    const pension_coeff: number =
-      values.fuel === 'ELECTRIC' ? 1 : findPensionCoeff(Number(values.price));
+    const pension_coeff: number = findPensionCoeff(values.price);
 
-    const rate: number =
-      values.fuel === 'ELECTRIC'
-        ? 1
-        : calcRate(values.fuel, Number(values.fuel));
+    const excise: number = calcExcise(
+      values.fuel,
+      Number(values.capacity),
+      Number(values.year)
+    );
 
     const customs: number =
-      Number(values.price) * (values.fuel === 'ELECTRIC' ? 1 : 0.1);
-
-    const excise: number = rate * values.capacity * Number(values.year);
+      values.price *
+      (values.fuel === FuelType.electric || values.fuel === FuelType.hybrid
+        ? 1
+        : 0.1);
 
     const tax: number =
-      (Number(values.price) + customs + excise) *
-      (values.fuel === 'ELECTRIC' ? 1 : 0.2);
+      (values.price + customs + excise) *
+      (values.fuel === FuelType.electric || values.fuel === FuelType.hybrid
+        ? 1
+        : 0.2);
 
-    const pension_fund: number = Number(values.price) * pension_coeff;
+    const pension_fund: number = values.price * pension_coeff;
 
     setCustomsResult({
       insurance: checkInsurance,
-      vehicleCost: Number(values.price),
+      vehicleCost: values.price,
       customsPrice: customs,
       excise: excise,
       tax: tax,
