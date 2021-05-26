@@ -6,7 +6,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { getDataById } from '../../API/catalog';
 import Charateristic from './Characteristic';
 import Carousel from './Carousel';
-import CuctomsPrice from '../../Components/CuctomsPrice';
+import CalcCustoms from '../CalcCustoms';
 
 import useStyles from './style';
 
@@ -75,7 +75,7 @@ const VehiclePage = () => {
             <Carousel data={data?.imageList} />
             <Charateristic data={data?.vehicleData} />
           </div>
-          {!loading && <CuctomsPrice data={responeData} />}
+          {!loading && <CalcCustoms data={responeData} />}
         </div>
       </Spin>
     </div>

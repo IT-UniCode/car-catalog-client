@@ -6,6 +6,7 @@ import {
   DIESEL_TYPES,
   GAS_TYPES,
   HYBRID_TYPES,
+  ELECTRIC_TYPES,
 } from '../../../utils/constants';
 import { FuelType } from '../../../utils/enums';
 
@@ -50,8 +51,11 @@ const CalcForm: FC<ICalcFormProps> = ({
     if (HYBRID_TYPES.includes(fuelType)) {
       return FuelType.hybrid;
     }
+    if (ELECTRIC_TYPES.includes(fuelType)) {
+      return FuelType.electric;
+    }
 
-    return FuelType.electric;
+    return '';
   };
 
   useEffect(() => {}, []);
@@ -78,19 +82,9 @@ const CalcForm: FC<ICalcFormProps> = ({
           <span> (3% от стоимости авто, но не менее 150 $)</span>
         </Form.Item>
         <Form.Item
-          name='capacity'
-          label='Объем двигателя, л | кВт'
-          initialValue={vehicleData.egn && parseFloat(vehicleData.egn)}
-          rules={[
-            { required: true, pattern: /^[0-9]{0,4}([.,]{1}[0-9]{1})?$/ },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
           name='fuel'
           label='Тип топлива'
-          initialValue={checkFuelType(vehicleData.ft)}
+          initialValue={checkFuelType(vehicleData?.ft)}
           rules={[{ required: true }]}
         >
           <Select allowClear>
@@ -99,6 +93,16 @@ const CalcForm: FC<ICalcFormProps> = ({
             <Option value={FuelType.electric}>Електро</Option>
             <Option value={FuelType.hybrid}>Гибрид</Option>
           </Select>
+        </Form.Item>
+        <Form.Item
+          name='capacity'
+          label='Объем двигателя, л | кВт'
+          initialValue={vehicleData?.egn && parseFloat(vehicleData?.egn)}
+          rules={[
+            { required: true, pattern: /^[0-9]{0,4}([.,]{1}[0-9]{1})?$/ },
+          ]}
+        >
+          <Input />
         </Form.Item>
         <Form.Item
           name='year'
@@ -111,7 +115,7 @@ const CalcForm: FC<ICalcFormProps> = ({
         <Form.Item
           name='location'
           label='Выберите площадку аукциона'
-          initialValue={vehicleData?.syn}
+          initialValue={vehicleData?.syn === '*VIX*' ? '' : vehicleData?.syn}
           rules={[{ required: true }]}
         >
           <Select allowClear>

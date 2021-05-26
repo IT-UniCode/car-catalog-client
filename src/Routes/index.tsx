@@ -5,6 +5,7 @@ import { Switch, Route } from 'react-router-dom';
 import Home from '../Pages/Home';
 import Catalog from '../Pages/Catalog';
 import VehiclePage from '../Pages/VehiclePage';
+import CalcCustoms from '../Pages/CalcCustoms';
 
 import useStyles from './style';
 
@@ -29,6 +30,11 @@ const ROUTES: IRoutes[] = [
     path: '/catalog/',
     exact: false,
     componnent: <VehiclePage />,
+  },
+  {
+    path: '/calc',
+    exact: false,
+    componnent: <CalcCustoms data={undefined}/>,
   },
 ];
 
