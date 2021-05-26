@@ -100,7 +100,7 @@ const CalculationResult: FC<ICalculationResultProps> = ({ data }) => {
   const sumAnotherCosts = getSum(anotherCosts);
 
   return (
-    <div className={classes.root}>
+    <div id='priceList' className={classes.root}>
       <table className='result-table'>
         <thead>
           <tr className='first-row'>
