@@ -90,7 +90,6 @@ declare interface IContent {
   sdd: string;
   hb: number;
   bnp: number;
-  syn: string;
   ad: number;
   syn: string;
   al: string;
@@ -121,4 +120,5 @@ declare interface ICustomsResult {
   deliveryToOdessa: number;
   deliveryToPort: number;
   port: string;
+  time: number;
 }

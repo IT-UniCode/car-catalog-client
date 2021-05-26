@@ -13,7 +13,7 @@ interface ICosts {
 
 const CalculationResult: FC<ICalculationResultProps> = ({ data }) => {
   const classes = useStyles();
-
+    
   const costsInUSA: ICosts[] = [
     {
       title: 'Стоимость вашего авто на аукционе в США',
@@ -21,7 +21,7 @@ const CalculationResult: FC<ICalculationResultProps> = ({ data }) => {
     },
     {
       title: 'Страховка авто (3% от стоимости)',
-      cost: data?.insurance ? 150 : 0,
+      cost: data!.insurance ? 150 : 0,
     },
     {
       title: 'Аукционный сбор',
@@ -32,7 +32,7 @@ const CalculationResult: FC<ICalculationResultProps> = ({ data }) => {
       cost: 1000,
     },
     {
-      title: `Доставка с аукциона в порт ${data!.port} погрузки*`,
+      title: `Доставка с аукциона в порт погрузки ${data!.port} *`,
       cost: data!.deliveryToPort,
     },
     {
@@ -120,6 +120,10 @@ const CalculationResult: FC<ICalculationResultProps> = ({ data }) => {
               <td>{item.cost} $</td>
             </tr>
           ))}
+          <tr className='conclusion_row'>
+            <td colSpan={2}>Время доставки</td>
+            <td>{data!.time} дней</td>
+          </tr>
           <tr className='conclusion_row'>
             <td colSpan={2}>Итого</td>
             <td>{sumCostsInUsa} $</td>

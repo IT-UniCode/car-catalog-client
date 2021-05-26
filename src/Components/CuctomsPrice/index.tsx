@@ -91,8 +91,8 @@ const CustomsPrice: FC<ICustomsPriceProps> = ({ data }) => {
     return rate * year * engineCapacity;
   };
 
-  const calcPrice = (values: ICalcCustomsPrice) => {
-    const pension_coeff: number = findPensionCoeff(values.price);
+  const calcPrice = async (values: ICalcCustomsPrice) => {
+    const pension_coeff: number = findPensionCoeff(Number(values.price));
 
     const excise: number = calcExcise(
       values.fuel,
@@ -101,37 +101,41 @@ const CustomsPrice: FC<ICustomsPriceProps> = ({ data }) => {
     );
 
     const customs: number =
-      values.price *
+      Number(values.price) *
       (values.fuel === FuelType.electric || values.fuel === FuelType.hybrid
         ? 1
         : 0.1);
 
     const tax: number =
-      (values.price + customs + excise) *
+      (Number(values.price) + customs + excise) *
       (values.fuel === FuelType.electric || values.fuel === FuelType.hybrid
         ? 1
         : 0.2);
 
-    const pension_fund: number = values.price * pension_coeff;
+    const pension_fund: number = Number(values.price) * pension_coeff;
 
     const location = values.location.split('-');
 
-    getDeliveryCostData(location[0].trim(), location[1].trim()).then(
-      (costRes: any) => {
-        getDeliveryPortData(values.location).then((portRes: any) => {
-          setCustomsResult({
-            deliveryToOdessa: Math.round(costRes.data.deliveryToOdessa),
-            deliveryToPort: Math.round(costRes.data.deliveryToPort),
-            port: portRes.data.port,
-            firstRegistration: Math.round(convertUAHToUSD(760)),
-            insurance: checkInsurance,
-            vehicleCost: values.price,
-            customsPrice: Math.round(customs),
-            excise: Math.round(excise),
-            tax: Math.round(tax),
-            pension_fund: Math.round(pension_fund),
-          });
-        });
+    await getDeliveryCostData(location[0].trim(), location[1].trim()).then(
+      async (costRes: any) => {
+        
+        await getDeliveryPortData(values.location).then(
+          async (portRes: any) => {
+            await setCustomsResult({
+              deliveryToOdessa: Math.round(costRes.data.deliveryToOdessa),
+              deliveryToPort: Math.round(costRes.data.deliveryToPort),
+              port: portRes.data.port || costRes.data.port || '-',
+              firstRegistration: Math.round(convertUAHToUSD(760)),
+              insurance: checkInsurance,
+              vehicleCost: Number(values.price),
+              customsPrice: Math.round(customs),
+              excise: Math.round(excise),
+              tax: Math.round(tax),
+              pension_fund: Math.round(pension_fund),
+              time: portRes.data.time || '-',
+            });
+          }
+        );
       }
     );
 
