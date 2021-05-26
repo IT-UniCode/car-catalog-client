@@ -27,9 +27,14 @@ const useStyles = createUseStyles({
         '&:nth-child(2)': {
           width: '100%',
         },
+
+        '&:nth-child(3)': {
+          width: '100%',
+          minWidth: '150px',
+        },
       },
 
-      '& .first-row': {
+      '& .first-row, .title-row>td': {
         backgroundColor: '#1890ff',
         color: '#FFF',
       },
@@ -38,6 +43,7 @@ const useStyles = createUseStyles({
         textAlign: 'center',
         fontSize: '24px',
         fontWeight: '500',
+
       },
       '& .conclusion_row': {
         fontWeight: '700',

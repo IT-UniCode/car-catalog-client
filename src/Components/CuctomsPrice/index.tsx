@@ -4,6 +4,7 @@ import CalcForm from './CalcForm';
 import CalculationResult from './CalculationResult';
 import { getCurrencyData } from '../../API/currency';
 import { getData } from '../../API/catalog';
+import { getDeliveryCostData, getDeliveryPortData } from '../../API/delivery';
 import { FuelType } from '../../utils/enums';
 
 import useStyles from './style';
@@ -90,8 +91,49 @@ const CustomsPrice: FC<ICustomsPriceProps> = ({ data }) => {
     return rate * year * engineCapacity;
   };
 
-  const calcPrice = (values: ICalcCustomsPrice) => {
-    const pension_coeff: number = findPensionCoeff(values.price);
+  const calcAuctionFeeInBetween = (
+    price: number,
+    fee: number,
+    feeCoef: number,
+    startNumber: number,
+    endNumber: number,
+    interval: number
+  ) => {
+    for (let i = startNumber; i <= endNumber; i += interval) {
+      if (price < i) {
+        return fee;
+      }
+      fee += feeCoef;
+    }
+
+    return fee;
+  };
+
+  const calcAuctionFee = (price: number) => {
+    if (price < 100) {
+      return 1;
+    }
+    if (price >= 100 && price < 800) {
+      return calcAuctionFeeInBetween(price, 25, 25, 200, 800, 100);
+    }
+    if (price >= 800 && price < 2000) {
+      return calcAuctionFeeInBetween(price, 175, 15, 900, 2000, 100);
+    }
+    if (price >= 2000 && price < 7000) {
+      return calcAuctionFeeInBetween(price, 340, 25, 2500, 7000, 500);
+    }
+    if (price >= 7000 && price < 10000) {
+      return 575;
+    }
+    if (price >= 10000 && price < 15000) {
+      return 600;
+    }
+
+    return price * 0.04;
+  };
+
+  const calcPrice = async (values: ICalcCustomsPrice) => {
+    const pension_coeff: number = findPensionCoeff(Number(values.price));
 
     const excise: number = calcExcise(
       values.fuel,
@@ -100,28 +142,45 @@ const CustomsPrice: FC<ICustomsPriceProps> = ({ data }) => {
     );
 
     const customs: number =
-      values.price *
+      Number(values.price) *
       (values.fuel === FuelType.electric || values.fuel === FuelType.hybrid
         ? 1
         : 0.1);
 
     const tax: number =
-      (values.price + customs + excise) *
+      (Number(values.price) + customs + excise) *
       (values.fuel === FuelType.electric || values.fuel === FuelType.hybrid
         ? 1
         : 0.2);
 
-    const pension_fund: number = values.price * pension_coeff;
+    const pension_fund: number = Number(values.price) * pension_coeff;
 
-    setCustomsResult({
-      firstRegistration: Math.round(convertUAHToUSD(760)),
-      insurance: checkInsurance,
-      vehicleCost: values.price,
-      customsPrice: Math.round(customs),
-      excise: Math.round(excise),
-      tax: Math.round(tax),
-      pension_fund: Math.round(pension_fund),
-    });
+    const auctionFee = calcAuctionFee(Number(values.price));
+
+    const location = values.location.split('-');
+
+    await getDeliveryCostData(location[0].trim(), location[1].trim()).then(
+      async (costRes: any) => {
+        await getDeliveryPortData(values.location).then(
+          async (portRes: any) => {
+            await setCustomsResult({
+              deliveryToOdessa: Math.round(costRes.data.deliveryToOdessa),
+              deliveryToPort: Math.round(costRes.data.deliveryToPort),
+              port: portRes.data.port || costRes.data.port || '-',
+              firstRegistration: Math.round(convertUAHToUSD(760)),
+              insurance: checkInsurance,
+              vehicleCost: Number(values.price),
+              customsPrice: Math.round(customs),
+              excise: Math.round(excise),
+              tax: Math.round(tax),
+              pension_fund: Math.round(pension_fund),
+              time: portRes.data.time || '-',
+              auctionFee: Math.round(auctionFee),
+            });
+          }
+        );
+      }
+    );
 
     setShowResult(true);
   };
