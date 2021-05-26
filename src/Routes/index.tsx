@@ -34,7 +34,7 @@ const ROUTES: IRoutes[] = [
   {
     path: '/calc',
     exact: false,
-    componnent: <CalcCustoms />,
+    componnent: <CalcCustoms data={undefined}/>,
   },
 ];
 

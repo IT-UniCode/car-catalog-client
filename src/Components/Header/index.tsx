@@ -13,6 +13,8 @@ const CustomHeader: FC = () => {
   const [path, setPath] = useState(['/']);
 
   useEffect(() => {
+    console.log(history.location.pathname);
+    
     setPath([`${history.location.pathname}`]);
   }, [history.location.pathname]);
 

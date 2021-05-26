@@ -27,4 +27,6 @@ export const GAS_TYPES = [
 
 export const HYBRID_TYPES = ['HYBRID ENGINE', 'ELECTRIC AND DIESEL HYBRID'];
 
+export const ELECTRIC_TYPES = ['ELECTRIC'];
+
 export const DIESEL_TYPES = ['DIESEL'];
