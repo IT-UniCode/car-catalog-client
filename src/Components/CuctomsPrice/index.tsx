@@ -1,4 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
+import ReactToPrint from 'react-to-print';
+import { Button } from 'antd';
+import { PrinterOutlined } from '@ant-design/icons';
 
 import CalcForm from './CalcForm';
 import CalculationResult from './CalculationResult';
@@ -217,6 +220,16 @@ const CustomsPrice: FC<ICustomsPriceProps> = ({ data }) => {
         locations={locations}
       />
       {showResut && <CalculationResult data={customsResult} />}
+      {showResut && (
+        <ReactToPrint
+          trigger={() => (
+            <Button type='primary' size='large' icon={<PrinterOutlined />}>
+              Распечатать
+            </Button>
+          )}
+          content={() => document.getElementById('priceList')}
+        />
+      )}
     </div>
   );
 };
