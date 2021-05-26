@@ -11,7 +11,7 @@ const CustomFooter: FC = () => {
   return (
     <Footer className={classes.root}>
       <div className='container'>
-        Car Catalog ©2021 Created by UniCode
+        Car Trade ©2021 Created by UniCode
       </div>
     </Footer>
   );
