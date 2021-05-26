@@ -28,6 +28,9 @@ const CustomHeader: FC = () => {
           <Menu.Item key='/catalog'>
             <Link to='/catalog'>Каталог</Link>
           </Menu.Item>
+          <Menu.Item key='/calc'>
+            <Link to='/calc'>Калькулятор</Link>
+          </Menu.Item>
         </Menu>
       </div>
     </Header>
