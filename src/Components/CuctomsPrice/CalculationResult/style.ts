@@ -27,6 +27,11 @@ const useStyles = createUseStyles({
         '&:nth-child(2)': {
           width: '100%',
         },
+
+        '&:nth-child(3)': {
+          width: '100%',
+          minWidth: '150px',
+        },
       },
 
       '& .first-row, .title-row>td': {

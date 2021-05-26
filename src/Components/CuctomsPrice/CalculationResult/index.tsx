@@ -13,7 +13,7 @@ interface ICosts {
 
 const CalculationResult: FC<ICalculationResultProps> = ({ data }) => {
   const classes = useStyles();
-    
+
   const costsInUSA: ICosts[] = [
     {
       title: 'Стоимость вашего авто на аукционе в США',
@@ -25,7 +25,7 @@ const CalculationResult: FC<ICalculationResultProps> = ({ data }) => {
     },
     {
       title: 'Аукционный сбор',
-      cost: 0,
+      cost: data!.auctionFee,
     },
     {
       title: 'Брокерские услуги в Америке',
@@ -45,7 +45,7 @@ const CalculationResult: FC<ICalculationResultProps> = ({ data }) => {
     },
     {
       title: 'Доставка кораблем в Одессу',
-      cost:  data!.deliveryToOdessa,
+      cost: data!.deliveryToOdessa,
     },
   ];
 
@@ -91,7 +91,7 @@ const CalculationResult: FC<ICalculationResultProps> = ({ data }) => {
   ];
 
   const getSum = (costs: ICosts[]) => {
-    return costs.reduce((sum, item) => item.cost + sum, 0);
+    return Math.round(costs.reduce((sum, item) => item.cost + sum, 0));
   };
 
   const sumCostsInUsa = getSum(costsInUSA);

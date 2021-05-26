@@ -120,5 +120,6 @@ declare interface ICustomsResult {
   deliveryToOdessa: number;
   deliveryToPort: number;
   port: string;
+  auctionFee: number;
   time: number;
 }

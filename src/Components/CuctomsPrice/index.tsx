@@ -91,6 +91,47 @@ const CustomsPrice: FC<ICustomsPriceProps> = ({ data }) => {
     return rate * year * engineCapacity;
   };
 
+  const calcAuctionFeeInBetween = (
+    price: number,
+    fee: number,
+    feeCoef: number,
+    startNumber: number,
+    endNumber: number,
+    interval: number
+  ) => {
+    for (let i = startNumber; i <= endNumber; i += interval) {
+      if (price < i) {
+        return fee;
+      }
+      fee += feeCoef;
+    }
+
+    return fee;
+  };
+
+  const calcAuctionFee = (price: number) => {
+    if (price < 100) {
+      return 1;
+    }
+    if (price >= 100 && price < 800) {
+      return calcAuctionFeeInBetween(price, 25, 25, 200, 800, 100);
+    }
+    if (price >= 800 && price < 2000) {
+      return calcAuctionFeeInBetween(price, 175, 15, 900, 2000, 100);
+    }
+    if (price >= 2000 && price < 7000) {
+      return calcAuctionFeeInBetween(price, 340, 25, 2500, 7000, 500);
+    }
+    if (price >= 7000 && price < 10000) {
+      return 575;
+    }
+    if (price >= 10000 && price < 15000) {
+      return 600;
+    }
+
+    return price * 0.04;
+  };
+
   const calcPrice = async (values: ICalcCustomsPrice) => {
     const pension_coeff: number = findPensionCoeff(Number(values.price));
 
@@ -114,11 +155,12 @@ const CustomsPrice: FC<ICustomsPriceProps> = ({ data }) => {
 
     const pension_fund: number = Number(values.price) * pension_coeff;
 
+    const auctionFee = calcAuctionFee(Number(values.price));
+
     const location = values.location.split('-');
 
     await getDeliveryCostData(location[0].trim(), location[1].trim()).then(
       async (costRes: any) => {
-        
         await getDeliveryPortData(values.location).then(
           async (portRes: any) => {
             await setCustomsResult({
@@ -133,6 +175,7 @@ const CustomsPrice: FC<ICustomsPriceProps> = ({ data }) => {
               tax: Math.round(tax),
               pension_fund: Math.round(pension_fund),
               time: portRes.data.time || '-',
+              auctionFee: Math.round(auctionFee),
             });
           }
         );
