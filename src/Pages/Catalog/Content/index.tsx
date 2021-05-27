@@ -9,14 +9,12 @@ interface IContentProps {
   data: IData | undefined;
   pageData: IPageData;
   setPageData: React.Dispatch<React.SetStateAction<IPageData>>;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Content: FC<IContentProps> = ({
   data,
   pageData,
   setPageData,
-  setLoading,
 }) => {
   const classes = useStyles();
 
@@ -30,7 +28,6 @@ const Content: FC<IContentProps> = ({
     }
 
     setPageData(copyPageData);
-    setLoading(true);
   };
 
   return (

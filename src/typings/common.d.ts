@@ -2,25 +2,6 @@ declare interface IData {
   content: IContent[];
   total: number;
   vehicle: IFacetData;
-  facetFields?: {
-    newly: IFacetData;
-    marks: IFacetData;
-    models: IFacetData;
-    years: IFacetData;
-    mileage: IFacetData;
-    locations: IFacetData;
-    saleNames: IFacetData;
-    saleDates: IFacetData;
-    documents: IFacetData;
-    sources: IFacetData;
-    damages: IFacetData;
-    body: IFacetData;
-    fuelTypes: IFacetData;
-    engineTypes: IFacetData;
-    transmission: IFacetData;
-    driveTrain: IFacetData;
-    cylinders: IFacetData;
-  };
 }
 
 declare interface IFacetData {

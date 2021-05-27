@@ -17,7 +17,7 @@ export const fetchFilters = () => {
   return async (dispatch: Dispatch<FilterActionType>) => {
     try {
       dispatch({ type: FilterActionTypes.FETCH_FILTERS });
-      const respone = getData({}).then((res) => {
+      getData({}).then((res) => {
         const filledData = fillingData(res.data.data.results.facetFields);
         dispatch({
           type: FilterActionTypes.FETCH_FILTERS_SUCCESS,
