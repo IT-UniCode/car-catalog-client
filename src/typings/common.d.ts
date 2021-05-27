@@ -1,7 +1,6 @@
 declare interface IData {
   content: IContent[];
   total: number;
-  vehicle: IFacetData;
 }
 
 declare interface IFacetData {

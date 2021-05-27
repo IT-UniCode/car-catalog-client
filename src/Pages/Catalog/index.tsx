@@ -26,28 +26,8 @@ const Catalog: FC = () => {
     sort: ['auction_date_type desc', 'auction_date_utc asc'],
   });
 
-  const [selectedFilters, setSelectedFilters] = useState<IFilter>({
-    'filter[VEHT]': [],
-    'filter[NLTS]': [],
-    'filter[MAKE]': [],
-    'filter[MODL]': [],
-    'filter[YEAR]': [],
-    'filter[ODM]': [],
-    'filter[LOC]': [],
-    'filter[SLOC]': [],
-    'filter[SDAT]': [],
-    'filter[TITL]': [],
-    'filter[SRCE]': [],
-    'filter[PRID]': [],
-    'filter[BODY]': [],
-    'filter[FUEL]': [],
-    'filter[TMTP]': [],
-    'filter[DRIV]': [],
-    'filter[FETI]': [],
-    'filter[CYLN]': [],
-    'filter[ENGN]': [],
-    'filter[MODG]': [],
-  });
+  const [selectedFilters, setSelectedFilters] = useState<IFilter>();
+
   const { fetchFilters } = useActions();
 
   const fillingData = (array: any) => {
@@ -71,26 +51,21 @@ const Catalog: FC = () => {
       setData({
         content: res.data.data.results.content,
         total: res.data.data.results.totalElements,
-        vehicle: filledData.VEHT,
       });
     });
   }, [pageData, selectedFilters]);
 
   return (
     // <Spin spinning={loading} size='large' indicator={spinIcon}>
-      <div className={classes.root}>
-        <Filter
-          data={data}
-          filterData={filters}
-          selectedFilters={selectedFilters}
-          setSelectedFilters={setSelectedFilters}
-        />
-        <Content
-          data={data}
-          pageData={pageData}
-          setPageData={setPageData}
-        />
-      </div>
+    <div className={classes.root}>
+      <Filter
+        data={data}
+        filterData={filters}
+        selectedFilters={selectedFilters}
+        setSelectedFilters={setSelectedFilters}
+      />
+      <Content data={data} pageData={pageData} setPageData={setPageData} />
+    </div>
     // </Spin>
   );
 };

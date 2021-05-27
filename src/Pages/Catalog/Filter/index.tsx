@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Collapse, Checkbox, Row, Button } from 'antd';
+import { Collapse, Checkbox, Row } from 'antd';
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
 
@@ -11,8 +11,8 @@ const { Panel } = Collapse;
 interface IFilterProps {
   data?: IData;
   filterData: IFilter;
-  selectedFilters: IFilter;
-  setSelectedFilters: React.Dispatch<React.SetStateAction<IFilter>>;
+  selectedFilters: IFilter | undefined;
+  setSelectedFilters: React.Dispatch<React.SetStateAction<IFilter | undefined>>;
 }
 
 const Filter: FC<IFilterProps> = ({
@@ -25,18 +25,21 @@ const Filter: FC<IFilterProps> = ({
 
   const changeFilter = (filterKey: string, filterValue: string) => {
     const copyFilterData: IFilter = { ...selectedFilters };
-    const index = copyFilterData[filterKey].indexOf(filterValue);
 
-    if (index === -1) {
-      copyFilterData[filterKey].push(filterValue);
+    if (copyFilterData[filterKey] === undefined) {
+      copyFilterData[filterKey] = [filterValue];
     } else {
-      copyFilterData[filterKey].splice(index, 1);
+      const index = copyFilterData[filterKey].indexOf(filterValue);
+
+      if (index === -1) {
+        copyFilterData[filterKey].push(filterValue);
+      } else {
+        copyFilterData[filterKey].splice(index, 1);
+      }
     }
 
     setSelectedFilters(copyFilterData);
   };
-
-  console.log(filterData);
 
   return (
     <div className={classes.root}>
@@ -45,18 +48,21 @@ const Filter: FC<IFilterProps> = ({
         <Checkbox.Group>
           {filterData &&
             Object.values(filterData).map((item: any, index: number) => {
-              if (item.quickPickCode === 'VEHT'){
+              if (item.quickPickCode === 'VEHT') {
                 return item.facetCounts.map((category: any, index: number) => (
                   <Row key={index}>
                     <Checkbox
                       value={category.uri}
                       className='filter_item'
-                      onChange={() => changeFilter(`filter[VEHT]`, category.query)}
+                      onChange={() =>
+                        changeFilter(`filter[VEHT]`, category.query)
+                      }
                     >
                       {VEHICLE_TYPES[category.uri]}
                     </Checkbox>
                   </Row>
-                ));}
+                ));
+              }
             })}
         </Checkbox.Group>
       </SimpleBar>
