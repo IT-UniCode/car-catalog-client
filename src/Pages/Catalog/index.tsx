@@ -7,6 +7,10 @@ import Content from './Content';
 import Filter from './Filter';
 
 import useStyles from './style';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { useDispatch } from 'react-redux';
+import { fetchFilters } from '../../Store/action-creators/filter';
+import { useActions } from '../../hooks/useAction';
 
 const spinIcon = <LoadingOutlined style={{ fontSize: 84 }} spin />;
 
@@ -14,6 +18,7 @@ const Catalog: FC = () => {
   const classes = useStyles();
   const [data, setData] = useState<IData>();
   const [loading, setLoading] = useState(true);
+  const {filters, error} = useTypedSelector(state => state.filter);
 
   const [pageData, setPageData] = useState<IPageData>({
     currentPage: 1,
@@ -22,8 +27,9 @@ const Catalog: FC = () => {
     defaultSort: true,
     sort: ['auction_date_type desc', 'auction_date_utc asc'],
   });
+console.log(filters);
 
-  const [filters, setFilters] = useState<IFilter>({
+  const [filterss, setFilters] = useState<IFilter>({
     'filter[VEHT]': [],
     'filter[NLTS]': [],
     'filter[MAKE]': [],
@@ -41,6 +47,7 @@ const Catalog: FC = () => {
     'filter[TMTP]': [],
     'filter[DRIV]': [],
   });
+  const {fetchFilters} = useActions();
 
   const fillingData = (array: any) => {
     let result: IDataResult = {};
@@ -53,36 +60,37 @@ const Catalog: FC = () => {
   };
 
   useEffect(() => {
-    getData(Object.assign(pageData, filters)).then((res) => {
-      const filledData = fillingData(res.data.data.results.facetFields);
+    fetchFilters();
+    // getData(Object.assign(pageData, filters)).then((res) => {
+    //   const filledData = fillingData(res.data.data.results.facetFields);
       
-      setData({
-        content: res.data.data.results.content,
-        total: res.data.data.results.totalElements,
-        vehicle: filledData.VEHT,
-        facetFields: {
-          newly: filledData.NLTS,
-          marks: filledData.MAKE,
-          models: filledData.MODL,
-          years: filledData.YEAR,
-          mileage: filledData.ODM,
-          locations: filledData.LOC,
-          saleNames: filledData.SLOC,
-          saleDates: filledData.SDAT,
-          documents: filledData.TITL,
-          sources: filledData.SRCE,
-          damages: filledData.PRID,
-          body: filledData.BODY,
-          fuelTypes: filledData.FUEL,
-          engineTypes: filledData.ENGN,
-          transmission: filledData.TMTP,
-          driveTrain: filledData.DRIV,
-          cylinders: filledData.CYLN,
-        },
-      });
-      setLoading(false);
-    });
-  }, [pageData, filters]);
+    //   setData({
+    //     content: res.data.data.results.content,
+    //     total: res.data.data.results.totalElements,
+    //     vehicle: filledData.VEHT,
+    //     facetFields: {
+    //       newly: filledData.NLTS,
+    //       marks: filledData.MAKE,
+    //       models: filledData.MODL,
+    //       years: filledData.YEAR,
+    //       mileage: filledData.ODM,
+    //       locations: filledData.LOC,
+    //       saleNames: filledData.SLOC,
+    //       saleDates: filledData.SDAT,
+    //       documents: filledData.TITL,
+    //       sources: filledData.SRCE,
+    //       damages: filledData.PRID,
+    //       body: filledData.BODY,
+    //       fuelTypes: filledData.FUEL,
+    //       engineTypes: filledData.ENGN,
+    //       transmission: filledData.TMTP,
+    //       driveTrain: filledData.DRIV,
+    //       cylinders: filledData.CYLN,
+    //     },
+    //   });
+    //   setLoading(false);
+    // });
+  }, [pageData]);
 
   return (
     <Spin spinning={loading} size='large' indicator={spinIcon}>
