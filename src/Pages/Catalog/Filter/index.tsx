@@ -63,6 +63,7 @@ const Filter: FC<IFilterProps> = ({
                   </Row>
                 ));
               }
+              return null;
             })}
         </Checkbox.Group>
       </SimpleBar>
@@ -70,7 +71,7 @@ const Filter: FC<IFilterProps> = ({
       <SimpleBar style={{ maxHeight: '100vh' }}>
         <Collapse defaultActiveKey={['0']}>
           {Object.values(filterData).map((filter: any, index: number) => {
-            if (filter.quickPickCode !== 'VEHT')
+            if (filter.quickPickCode !== 'VEHT') {
               return (
                 <Panel header={filter.displayName} key={index}>
                   <SimpleBar style={{ maxHeight: 200 }}>
@@ -96,6 +97,8 @@ const Filter: FC<IFilterProps> = ({
                   </SimpleBar>
                 </Panel>
               );
+            }
+            return null;
           })}
         </Collapse>
       </SimpleBar>
