@@ -8,7 +8,6 @@ const useStyles = createUseStyles({
     
     '& .filter_item': {
       margin: '10px 0',
-      display: 'block',
       cursor: 'pointer',
       border: 'none',
       boxShadow: 'none',

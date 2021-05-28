@@ -1,66 +1,83 @@
 import React, { FC } from 'react';
-import { Collapse, Checkbox, Row, Button } from 'antd';
+import { Collapse, Checkbox, Row } from 'antd';
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
 
 import { VEHICLE_TYPES } from '../../../utils/constants';
 
 import useStyles from './style';
+import { useActions } from '../../../hooks/useAction';
 
 const { Panel } = Collapse;
 interface IFilterProps {
   data?: IData;
   filterData: IFilter;
-  setFilterData: React.Dispatch<React.SetStateAction<IFilter>>;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedFilters: IFilter | undefined;
+  setSelectedFilters: React.Dispatch<React.SetStateAction<IFilter | undefined>>;
 }
 
 const Filter: FC<IFilterProps> = ({
   data,
   filterData,
-  setFilterData,
-  setLoading,
+  selectedFilters,
+  setSelectedFilters,
 }) => {
   const classes = useStyles();
+  const { startLoading } = useActions();
 
   const changeFilter = (filterKey: string, filterValue: string) => {
-    const copyFilterData: IFilter = { ...filterData };
-    const index = copyFilterData[filterKey].indexOf(filterValue);
+    const copyFilterData: IFilter = { ...selectedFilters };
 
-    if (index === -1) {
-      copyFilterData[filterKey].push(filterValue);
+    if (copyFilterData[filterKey] === undefined) {
+      copyFilterData[filterKey] = [filterValue];
     } else {
-      copyFilterData[filterKey].splice(index, 1);
+      const index = copyFilterData[filterKey].indexOf(filterValue);
+
+      if (index === -1) {
+        copyFilterData[filterKey].push(filterValue);
+      } else {
+        copyFilterData[filterKey].splice(index, 1);
+      }
     }
 
-    setFilterData(copyFilterData);
-    setLoading(true);
+    setSelectedFilters(copyFilterData);
+    startLoading();
   };
 
   return (
     <div className={classes.root}>
       <h2>Каталог ({data?.total})</h2>
       <SimpleBar style={{ maxHeight: 400 }}>
-        {data?.vehicle &&
-          Object.values(data?.vehicle.facetCounts).map(
-            (item: IFacetCount, index: number) => (
-              <Button
-                key={index}
-                className='filter_item'
-                value={item.uri}
-                onClick={() => changeFilter(`filter[VEHT]`, item.query)}
-              >
-                {VEHICLE_TYPES[item.uri]}
-              </Button>
-            )
-          )}
+        <Checkbox.Group>
+          {filterData &&
+            Object.values(filterData).map((item: any) => {
+              if (item.quickPickCode === 'VEHT') {
+                return item.facetCounts.map(
+                  (category: IFacetCount, index: number) => (
+                    <Row key={index}>
+                      <Checkbox
+                        value={category.uri}
+                        className='filter_item'
+                        onChange={() =>
+                          changeFilter(`filter[VEHT]`, category.query)
+                        }
+                      >
+                        {VEHICLE_TYPES[category.uri]}
+                      </Checkbox>
+                    </Row>
+                  )
+                );
+              }
+              return null;
+            })}
+        </Checkbox.Group>
       </SimpleBar>
       <h2>Фильтр</h2>
       <SimpleBar style={{ maxHeight: '100vh' }}>
         <Collapse defaultActiveKey={['0']}>
-          {data?.facetFields &&
-            Object.values(data?.facetFields).map(
-              (filter: IFacetData, index: number) => (
+          {Object.values(filterData).map((filter: any, index: number) => {
+            if (filter.quickPickCode !== 'VEHT') {
+              return (
                 <Panel header={filter.displayName} key={index}>
                   <SimpleBar style={{ maxHeight: 200 }}>
                     <Checkbox.Group>
@@ -84,8 +101,10 @@ const Filter: FC<IFilterProps> = ({
                     </Checkbox.Group>
                   </SimpleBar>
                 </Panel>
-              )
-            )}
+              );
+            }
+            return null;
+          })}
         </Collapse>
       </SimpleBar>
     </div>
