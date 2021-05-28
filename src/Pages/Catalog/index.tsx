@@ -30,24 +30,12 @@ const Catalog: FC = () => {
 
   const { fetchFilters } = useActions();
 
-  const fillingData = (array: any) => {
-    let result: IDataResult = {};
-
-    array?.forEach((item: any) => {
-      result[item.quickPickCode] = item;
-    });
-
-    return result;
-  };
-
   useEffect(() => {
     fetchFilters();
   }, []);
 
   useEffect(() => {
     getData(Object.assign(pageData, selectedFilters)).then((res) => {
-      const filledData = fillingData(res.data.data.results.facetFields);
-
       setData({
         content: res.data.data.results.content,
         total: res.data.data.results.totalElements,

@@ -47,22 +47,25 @@ const Filter: FC<IFilterProps> = ({
       <SimpleBar style={{ maxHeight: 400 }}>
         <Checkbox.Group>
           {filterData &&
-            Object.values(filterData).map((item: any, index: number) => {
+            Object.values(filterData).map((item: any) => {
               if (item.quickPickCode === 'VEHT') {
-                return item.facetCounts.map((category: any, index: number) => (
-                  <Row key={index}>
-                    <Checkbox
-                      value={category.uri}
-                      className='filter_item'
-                      onChange={() =>
-                        changeFilter(`filter[VEHT]`, category.query)
-                      }
-                    >
-                      {VEHICLE_TYPES[category.uri]}
-                    </Checkbox>
-                  </Row>
-                ));
+                return item.facetCounts.map(
+                  (category: IFacetCount, index: number) => (
+                    <Row key={index}>
+                      <Checkbox
+                        value={category.uri}
+                        className='filter_item'
+                        onChange={() =>
+                          changeFilter(`filter[VEHT]`, category.query)
+                        }
+                      >
+                        {VEHICLE_TYPES[category.uri]}
+                      </Checkbox>
+                    </Row>
+                  )
+                );
               }
+              return null;
             })}
         </Checkbox.Group>
       </SimpleBar>
@@ -70,7 +73,7 @@ const Filter: FC<IFilterProps> = ({
       <SimpleBar style={{ maxHeight: '100vh' }}>
         <Collapse defaultActiveKey={['0']}>
           {Object.values(filterData).map((filter: any, index: number) => {
-            if (filter.quickPickCode !== 'VEHT')
+            if (filter.quickPickCode !== 'VEHT') {
               return (
                 <Panel header={filter.displayName} key={index}>
                   <SimpleBar style={{ maxHeight: 200 }}>
@@ -96,6 +99,8 @@ const Filter: FC<IFilterProps> = ({
                   </SimpleBar>
                 </Panel>
               );
+            }
+            return null;
           })}
         </Collapse>
       </SimpleBar>
