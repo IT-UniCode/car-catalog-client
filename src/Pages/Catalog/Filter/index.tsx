@@ -6,6 +6,7 @@ import 'simplebar/dist/simplebar.min.css';
 import { VEHICLE_TYPES } from '../../../utils/constants';
 
 import useStyles from './style';
+import { useActions } from '../../../hooks/useAction';
 
 const { Panel } = Collapse;
 interface IFilterProps {
@@ -22,6 +23,7 @@ const Filter: FC<IFilterProps> = ({
   setSelectedFilters,
 }) => {
   const classes = useStyles();
+  const { startLoading } = useActions();
 
   const changeFilter = (filterKey: string, filterValue: string) => {
     const copyFilterData: IFilter = { ...selectedFilters };
@@ -39,6 +41,7 @@ const Filter: FC<IFilterProps> = ({
     }
 
     setSelectedFilters(copyFilterData);
+    startLoading();
   };
 
   return (

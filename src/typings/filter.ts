@@ -2,7 +2,6 @@ import { FilterActionTypes } from '../utils/enums';
 
 export interface IFilterState {
   filters: IFilter;
-  loading: boolean;
   error: null | string;
 }
 

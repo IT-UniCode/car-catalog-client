@@ -1,8 +1,10 @@
-import { combineReducers } from "redux";
-import { filterReducer } from "./filterReducer";
+import { combineReducers } from 'redux';
+import { filterReducer } from './filterReducer';
+import { loadingReducer } from './loadingReducer';
 
 export const rootReducer = combineReducers({
-  filter : filterReducer,
+  filter: filterReducer,
+  loading: loadingReducer,
 });
 
-export type RootState = ReturnType<typeof rootReducer>
+export type RootState = ReturnType<typeof rootReducer>;
