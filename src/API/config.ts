@@ -17,7 +17,7 @@ export const currencyApi = axios.create({
   baseURL: PRIVAT_API_URL,
   headers: {
     "Content-Type": "application/json",
-    accept: "text/html",
+    accept: "application/json",
   },
 });
 
