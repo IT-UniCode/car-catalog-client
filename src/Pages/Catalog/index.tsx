@@ -1,12 +1,12 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from "react";
 
-import { useTypedSelector } from '../../hooks/useTypedSelector';
-import { getData } from '../../API/catalog';
-import Content from './Content';
-import Filter from './Filter';
+import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { getData } from "../../API/catalog";
+import Content from "./Content";
+import Filter from "./Filter";
 
-import useStyles from './style';
-import { useActions } from '../../hooks/useAction';
+import useStyles from "./style";
+import { useActions } from "../../hooks/useAction";
 
 const Catalog: FC = () => {
   const classes = useStyles();
@@ -19,11 +19,12 @@ const Catalog: FC = () => {
     page: 0,
     size: 10,
     defaultSort: true,
-    sort: ['auction_date_type desc', 'auction_date_utc asc'],
+    sort: ["auction_date_type desc", "auction_date_utc asc"],
   });
 
   useEffect(() => {
     fetchFilters();
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {

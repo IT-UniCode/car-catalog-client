@@ -1,4 +1,4 @@
-import { LoadingActionTypes } from '../utils/enums';
+import { LoadingActionTypes } from "../utils/enums";
 
 export interface ILoadingState {
   loading: boolean;

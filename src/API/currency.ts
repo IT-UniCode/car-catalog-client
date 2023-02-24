@@ -1,3 +1,4 @@
-import {currencyApi} from './config';
+import { currencyApi } from "./config";
 
-export const getCurrencyData = (id: number) => currencyApi.get(`/pubinfo?json&exchange&coursid=${id}`);
+export const getCurrencyData = (id: number) =>
+  currencyApi.get(`/pubinfo?exchange&coursid=${id}`);

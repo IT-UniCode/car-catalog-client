@@ -1,16 +1,16 @@
-import React, { FC, useEffect, useState } from 'react';
-import ReactToPrint from 'react-to-print';
-import { Button } from 'antd';
-import { PrinterOutlined } from '@ant-design/icons';
+import React, { FC, useEffect, useState } from "react";
+import ReactToPrint from "react-to-print";
+import { Button } from "antd";
+import { PrinterOutlined } from "@ant-design/icons";
 
-import CalcForm from './CalcForm';
-import CalculationResult from './CalculationResult';
-import { getCurrencyData } from '../../API/currency';
-import { getData } from '../../API/catalog';
-import { getDeliveryCostData, getDeliveryPortData } from '../../API/delivery';
-import { FuelType } from '../../utils/enums';
+import CalcForm from "./CalcForm";
+import CalculationResult from "./CalculationResult";
+import { getCurrencyData } from "../../API/currency";
+import { getData } from "../../API/catalog";
+import { getDeliveryCostData, getDeliveryPortData } from "../../API/delivery";
+import { FuelType } from "../../utils/enums";
 
-import useStyles from './style';
+import useStyles from "./style";
 
 interface ICustomsPriceProps {
   data: IVehicleData[] | undefined;
@@ -160,7 +160,7 @@ const CustomsPrice: FC<ICustomsPriceProps> = ({ data }) => {
 
     const auctionFee = calcAuctionFee(Number(values.price));
 
-    const location = values.location.split('-');
+    const location = values.location.split("-");
 
     await getDeliveryCostData(location[0].trim(), location[1].trim()).then(
       async (costRes: any) => {
@@ -169,7 +169,7 @@ const CustomsPrice: FC<ICustomsPriceProps> = ({ data }) => {
             await setCustomsResult({
               deliveryToOdessa: Math.round(costRes.data.deliveryToOdessa),
               deliveryToPort: Math.round(costRes.data.deliveryToPort),
-              port: portRes.data.port || costRes.data.port || '-',
+              port: portRes.data.port || costRes.data.port || "-",
               firstRegistration: Math.round(convertUAHToUSD(760)),
               insurance: checkInsurance,
               vehicleCost: Number(values.price),
@@ -177,7 +177,7 @@ const CustomsPrice: FC<ICustomsPriceProps> = ({ data }) => {
               excise: Math.round(excise),
               tax: Math.round(tax),
               pension_fund: Math.round(pension_fund),
-              time: portRes.data.time || '-',
+              time: portRes.data.time || "-",
               auctionFee: Math.round(auctionFee),
             });
           }
@@ -223,11 +223,11 @@ const CustomsPrice: FC<ICustomsPriceProps> = ({ data }) => {
       {showResut && (
         <ReactToPrint
           trigger={() => (
-            <Button type='primary' size='large' icon={<PrinterOutlined />}>
+            <Button type="primary" size="large" icon={<PrinterOutlined />}>
               Распечатать
             </Button>
           )}
-          content={() => document.getElementById('priceList')}
+          content={() => document.getElementById("priceList")}
         />
       )}
     </div>
